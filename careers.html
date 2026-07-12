@@ -69,6 +69,7 @@
             <h4>Plumber</h4>
             <p>Install and repair pipwork, fittings and fixtures for home and site jobs. 2+ years' experience preferred; tools provided.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
+            <button type="button" class="btn-gold mt-3 justify-content-center w-100" onclick="openJobModal('Plumber')"><i class="fa-solid fa-paper-plane"></i> Apply Now</button>
           </div>
         </div>
       </div>
@@ -83,6 +84,7 @@
             <h4>Electrician</h4>
             <p>Wiring, fault repair and fitting installation for residential and commercial jobs. Valid electrical license required.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
+            <button type="button" class="btn-gold mt-3 justify-content-center w-100" onclick="openJobModal('Electrician')"><i class="fa-solid fa-paper-plane"></i> Apply Now</button>
           </div>
         </div>
       </div>
@@ -97,6 +99,7 @@
             <h4>Painter</h4>
             <p>Interior and exterior painting, texture work and finishing for homes and offices. Steady hand and attention to detail a must.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time / Part-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
+            <button type="button" class="btn-gold mt-3 justify-content-center w-100" onclick="openJobModal('Painter')"><i class="fa-solid fa-paper-plane"></i> Apply Now</button>
           </div>
         </div>
       </div>
@@ -111,6 +114,7 @@
             <h4>Driver</h4>
             <p>Drive for our taxi & booking service — airport runs, local trips and outstation bookings. Valid commercial license required.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
+            <button type="button" class="btn-gold mt-3 justify-content-center w-100" onclick="openJobModal('Driver')"><i class="fa-solid fa-paper-plane"></i> Apply Now</button>
           </div>
         </div>
       </div>
@@ -125,10 +129,15 @@
             <h4>Carpenter</h4>
             <p>Build and fit doors, windows, TV units and custom furniture. Experience with hand carving and finishing is a strong plus.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
+            <button type="button" class="btn-gold mt-3 justify-content-center w-100" onclick="openJobModal('Carpenter')"><i class="fa-solid fa-paper-plane"></i> Apply Now</button>
           </div>
         </div>
       </div>
 
+    </div>
+
+    <div class="text-center mt-4">
+      <button type="button" class="btn-outline-wood" onclick="openJobModal('')"><i class="fa-solid fa-user-plus"></i> Don't see your trade? Apply anyway</button>
     </div>
 
     <div class="mt-5">
@@ -147,25 +156,167 @@
   <div class="container">
     <div class="row booking-panel g-0 reveal">
       <div class="col-lg-5 booking-info">
-        <h3>Apply Now</h3>
-        <p>Fill in your details and our team will call you within 48 hours to discuss the role.</p>
+        <h3>Ready To Apply?</h3>
+        <p>Click "Apply Now" on the role you want above, or use the button here for any other trade. We'll call you within 48 hours to discuss the role.</p>
         <div class="contact-line"><i class="fa-solid fa-phone"></i> +91 9441448690</div>
         <div class="contact-line"><i class="fa-solid fa-envelope"></i> careers@gurumultiservices.com</div>
         <div class="contact-line"><i class="fa-solid fa-clock"></i> Mon–Sat, 9:00 AM – 7:00 PM</div>
       </div>
-      <div class="col-lg-7 booking-form-wrap">
-        <form id="careerForm" class="row g-3" novalidate>
-          <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control" id="capName" placeholder="Full Name" required><label for="capName">Full Name</label></div></div>
-          <div class="col-md-6"><div class="form-floating"><input type="tel" class="form-control" id="capPhone" placeholder="Phone Number" pattern="[0-9+ ]{7,15}" required><label for="capPhone">Phone Number</label></div></div>
-          <div class="col-md-6"><div class="form-floating"><select class="form-select" id="capRole" required><option value="" selected disabled>Choose a role</option><option>Plumber</option><option>Electrician</option><option>Painter</option><option>Driver</option><option>Carpenter</option><option>Other</option></select><label for="capRole">Role Applying For</label></div></div>
-          <div class="col-md-6"><div class="form-floating"><select class="form-select" id="capExperience" required><option value="" selected disabled>Choose experience</option><option>Fresher</option><option>1–2 years</option><option>3–5 years</option><option>5+ years</option></select><label for="capExperience">Experience</label></div></div>
-          <div class="col-12"><div class="form-floating"><textarea class="form-control" id="capNote" placeholder="Anything else we should know?" style="height:100px"></textarea><label for="capNote">Additional Notes (optional)</label></div></div>
-          <div class="col-12"><button type="submit" class="btn-gold w-100 justify-content-center"><i class="fa-solid fa-paper-plane"></i> Submit Application</button><div class="form-msg"></div></div>
-        </form>
+      <div class="col-lg-7 booking-form-wrap d-flex align-items-center justify-content-center text-center">
+        <div>
+          <i class="fa-solid fa-clipboard-list fa-2x mb-3" style="color:var(--gold)"></i>
+          <p style="color:var(--text-muted); max-width:380px;">Applications are submitted through the pop-up form — just pick a role above and click "Apply Now".</p>
+          <button type="button" class="btn-gold justify-content-center" onclick="openJobModal('')"><i class="fa-solid fa-paper-plane"></i> Open Application Form</button>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ================= Job Application Modal ================= -->
+<div class="modal fade" id="jobApplyModal" tabindex="-1" aria-labelledby="jobApplyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:var(--bg); border:1px solid var(--wood);">
+      <div class="modal-header" style="border-bottom:1px solid rgba(166,124,82,0.25);">
+        <h5 class="modal-title" id="jobApplyModalLabel">Job Application<span id="modalTitleRole"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="jobApplyForm" class="row g-3" novalidate
+              action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+
+          <!-- Sent to Formspree, not shown to applicant -->
+          <input type="hidden" name="_subject" id="modalSubjectField" value="New Job Application — Guru Multi Services">
+
+          <div class="col-12">
+            <div class="form-floating">
+              <select class="form-select" id="modalRole" name="Role Applying For" required>
+                <option value="" disabled>Choose a role</option>
+                <option>Plumber</option>
+                <option>Electrician</option>
+                <option>Painter</option>
+                <option>Driver</option>
+                <option>Carpenter</option>
+                <option>Other</option>
+              </select>
+              <label for="modalRole">Role Applying For</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="modalName" name="Full Name" placeholder="Full Name" required>
+              <label for="modalName">Full Name</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="tel" class="form-control" id="modalPhone" name="Phone Number" placeholder="Phone Number" pattern="[0-9+ ]{7,15}" required>
+              <label for="modalPhone">Phone Number</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="modalPlace" name="Place / Area" placeholder="Place / Area" required>
+              <label for="modalPlace">Place / Area (e.g. Chittoor, Thotapalyam)</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <select class="form-select" id="modalExperience" name="Work Experience" required>
+                <option value="" selected disabled>Choose experience</option>
+                <option>Fresher</option>
+                <option>1–2 years</option>
+                <option>3–5 years</option>
+                <option>5+ years</option>
+              </select>
+              <label for="modalExperience">Work Experience</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="modalAvailable" name="Available From" required>
+              <label for="modalAvailable">Available From</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-floating">
+              <textarea class="form-control" id="modalNote" name="Additional Notes" placeholder="Anything else we should know?" style="height:90px"></textarea>
+              <label for="modalNote">Additional Notes (optional)</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-gold w-100 justify-content-center" id="modalSubmitBtn"><i class="fa-solid fa-paper-plane"></i> Submit Application</button>
+            <div class="form-msg"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openJobModal(role) {
+    const roleSelect = document.getElementById('modalRole');
+    const titleRole = document.getElementById('modalTitleRole');
+    const subjectField = document.getElementById('modalSubjectField');
+    if (role) {
+      roleSelect.value = role;
+      titleRole.textContent = ' — ' + role;
+      subjectField.value = 'New Job Application — ' + role + ' — Guru Multi Services';
+    } else {
+      roleSelect.value = '';
+      titleRole.textContent = '';
+      subjectField.value = 'New Job Application — Guru Multi Services';
+    }
+    const modalEl = document.getElementById('jobApplyModal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
+  }
+
+  document.getElementById('jobApplyForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const msgBox = form.querySelector('.form-msg');
+    const submitBtn = document.getElementById('modalSubmitBtn');
+
+    if (!form.checkValidity()) {
+      form.classList.add('was-validated');
+      if (msgBox) {
+        msgBox.textContent = 'Please fill in all required fields correctly.';
+        msgBox.className = 'form-msg error';
+      }
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        msgBox.textContent = "Application received! Our team will call you within 48 hours.";
+        msgBox.className = 'form-msg success';
+        form.reset();
+        form.classList.remove('was-validated');
+      } else {
+        return response.json().then(data => {
+          const errText = (data && data.errors) ? data.errors.map(err => err.message).join(', ') : 'Something went wrong. Please try calling us directly.';
+          msgBox.textContent = errText;
+          msgBox.className = 'form-msg error';
+        });
+      }
+    }).catch(() => {
+      msgBox.textContent = 'Network error — please try again, or call us directly at +91 9441448690.';
+      msgBox.className = 'form-msg error';
+    }).finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
+    });
+  });
+</script>
 
 <footer class="site-footer">
   <div class="container">
