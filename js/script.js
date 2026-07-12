@@ -219,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
   handleFormSubmit(document.getElementById('bookingForm'), "Thank you! Your service request has been received — our team will call you shortly to confirm.");
   handleFormSubmit(document.getElementById('contactForm'), "Message sent! We'll get back to you within 24 hours.");
   handleFormSubmit(document.getElementById('newsletterForm'), "You're subscribed! Watch your inbox for offers & updates.");
+  handleFormSubmit(document.getElementById('careerForm'), "Application received! Our team will call you within 48 hours to discuss the role.");
 
   /* ---------------- Service detail scrollspy (service pages) ---------------- */
   const spyLinks = document.querySelectorAll('.service-detail-nav .list-group-item');
