@@ -226,45 +226,41 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  /* Reads every real input/select/textarea in a form and pairs it with its
+     visible label (or placeholder, as a fallback) so the WhatsApp message
+     always matches whatever fields that particular page's form has —
+     no hardcoded field IDs, so it works across every page without edits. */
+  function buildGenericMessage(form, title) {
+    const lines = [title];
+    const fields = form.querySelectorAll('input, select, textarea');
+    fields.forEach((field) => {
+      if (!field.id && !field.name) return;
+      if (field.type === 'submit' || field.type === 'hidden' || field.type === 'button') return;
+
+      let labelText = '';
+      const label = field.id ? form.querySelector(`label[for="${field.id}"]`) : null;
+      if (label) labelText = label.textContent.trim();
+      else if (field.getAttribute('placeholder')) labelText = field.getAttribute('placeholder');
+      else labelText = field.name || field.id;
+
+      const value = field.value && field.value.trim() ? field.value.trim() : '-';
+      lines.push(`${labelText}: ${value}`);
+    });
+    return lines.join('\n');
+  }
+
   handleFormToWhatsApp(document.getElementById('bookingForm'), {
-    buildMessage: (form) => {
-      const name = form.querySelector('#bkName').value;
-      const phone = form.querySelector('#bkPhone').value;
-      const service = form.querySelector('#bkService').value;
-      const date = form.querySelector('#bkDate').value;
-      const address = form.querySelector('#bkAddress').value;
-      const message = form.querySelector('#bkMessage').value || '-';
-      return `New Service Booking Request\n` +
-        `Name: ${name}\n` +
-        `Phone: ${phone}\n` +
-        `Service: ${service}\n` +
-        `Preferred Date: ${date}\n` +
-        `Address: ${address}\n` +
-        `Notes: ${message}`;
-    },
+    buildMessage: (form) => buildGenericMessage(form, 'New Service Booking Request'),
     successText: "Opening WhatsApp — just tap Send to confirm your booking request!",
   });
 
   handleFormToWhatsApp(document.getElementById('contactForm'), {
-    buildMessage: (form) => {
-      const name = form.querySelector('#ctName').value;
-      const email = form.querySelector('#ctEmail').value;
-      const subject = form.querySelector('#ctSubject').value;
-      const message = form.querySelector('#ctMessage').value;
-      return `New Contact Message\n` +
-        `Name: ${name}\n` +
-        `Email: ${email}\n` +
-        `Subject: ${subject}\n` +
-        `Message: ${message}`;
-    },
+    buildMessage: (form) => buildGenericMessage(form, 'New Contact Message'),
     successText: "Opening WhatsApp — just tap Send to reach us!",
   });
 
   handleFormToWhatsApp(document.getElementById('newsletterForm'), {
-    buildMessage: (form) => {
-      const email = form.querySelector('input[type="email"]').value;
-      return `Please subscribe me to seasonal offers.\nEmail: ${email}`;
-    },
+    buildMessage: (form) => buildGenericMessage(form, 'New Newsletter Subscription'),
     successText: "Opening WhatsApp — tap Send to subscribe!",
   });
 
