@@ -1,9 +1,13 @@
 /* ==========================================================================
-   GURU MULTI SERVICES — MAIN SCRIPT
+   GURU MULTI SERVICES — MAIN SCRIPT (NO-BACKEND VERSION)
    Preloader · Navbar · Scroll progress · Reveal animations · Counters
    FAQ accordion · Gallery filter + lightbox · Before/After slider
-   Booking + Contact + Newsletter form handling · Back to top · WhatsApp
+   Booking + Contact + Newsletter form handling (→ wa.me redirect)
+   Back to top · WhatsApp
    ========================================================================== */
+
+// Your WhatsApp business number, international format, digits only (no +)
+const WHATSAPP_NUMBER = '919441448690';
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -12,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('load', function () {
     setTimeout(() => preloader && preloader.classList.add('loaded'), 350);
   });
-  // Fallback in case 'load' already fired
   setTimeout(() => preloader && preloader.classList.add('loaded'), 2500);
 
   /* ---------------- Footer year ---------------- */
@@ -28,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
   handleNavScroll();
   window.addEventListener('scroll', handleNavScroll);
 
-  // Close mobile menu after clicking a link
   const navCollapseEl = document.getElementById('navMain');
   if (navCollapseEl) {
     document.querySelectorAll('#navMain .nav-link').forEach(link => {
@@ -192,12 +194,13 @@ document.addEventListener('DOMContentLoaded', function () {
     slider.addEventListener('click', (e) => { if (e.target !== handle && !handle.contains(e.target)) setPosition(e.clientX); });
   });
 
-  /* ---------------- Form helper ---------------- */
-  function handleFormSubmit(form, successText) {
+  /* ---------------- Form → WhatsApp redirect helper ---------------- */
+  function handleFormToWhatsApp(form, { buildMessage, successText }) {
     if (!form) return;
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       const msgBox = form.querySelector('.form-msg');
+
       if (!form.checkValidity()) {
         form.classList.add('was-validated');
         if (msgBox) {
@@ -206,8 +209,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return;
       }
-      // No backend connected yet — simulate success.
-      // Replace this block with a fetch() call to your booking/contact API.
+
+      const text = buildMessage(form);
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+      // Open WhatsApp (app on mobile, WhatsApp Web on desktop) with the
+      // message pre-filled. The visitor still needs to tap Send.
+      window.open(url, '_blank', 'noopener');
+
       if (msgBox) {
         msgBox.textContent = successText;
         msgBox.className = 'form-msg success';
@@ -216,10 +225,71 @@ document.addEventListener('DOMContentLoaded', function () {
       form.classList.remove('was-validated');
     });
   }
-  handleFormSubmit(document.getElementById('bookingForm'), "Thank you! Your service request has been received — our team will call you shortly to confirm.");
-  handleFormSubmit(document.getElementById('contactForm'), "Message sent! We'll get back to you within 24 hours.");
-  handleFormSubmit(document.getElementById('newsletterForm'), "You're subscribed! Watch your inbox for offers & updates.");
-  handleFormSubmit(document.getElementById('careerForm'), "Application received! Our team will call you within 48 hours to discuss the role.");
+
+  handleFormToWhatsApp(document.getElementById('bookingForm'), {
+    buildMessage: (form) => {
+      const name = form.querySelector('#bkName').value;
+      const phone = form.querySelector('#bkPhone').value;
+      const service = form.querySelector('#bkService').value;
+      const date = form.querySelector('#bkDate').value;
+      const address = form.querySelector('#bkAddress').value;
+      const message = form.querySelector('#bkMessage').value || '-';
+      return `New Service Booking Request\n` +
+        `Name: ${name}\n` +
+        `Phone: ${phone}\n` +
+        `Service: ${service}\n` +
+        `Preferred Date: ${date}\n` +
+        `Address: ${address}\n` +
+        `Notes: ${message}`;
+    },
+    successText: "Opening WhatsApp — just tap Send to confirm your booking request!",
+  });
+
+  handleFormToWhatsApp(document.getElementById('contactForm'), {
+    buildMessage: (form) => {
+      const name = form.querySelector('#ctName').value;
+      const email = form.querySelector('#ctEmail').value;
+      const subject = form.querySelector('#ctSubject').value;
+      const message = form.querySelector('#ctMessage').value;
+      return `New Contact Message\n` +
+        `Name: ${name}\n` +
+        `Email: ${email}\n` +
+        `Subject: ${subject}\n` +
+        `Message: ${message}`;
+    },
+    successText: "Opening WhatsApp — just tap Send to reach us!",
+  });
+
+  handleFormToWhatsApp(document.getElementById('newsletterForm'), {
+    buildMessage: (form) => {
+      const email = form.querySelector('input[type="email"]').value;
+      return `Please subscribe me to seasonal offers.\nEmail: ${email}`;
+    },
+    successText: "Opening WhatsApp — tap Send to subscribe!",
+  });
+
+  /* ---------------- Career form (unchanged, client-side only) ---------------- */
+  const careerForm = document.getElementById('careerForm');
+  if (careerForm) {
+    careerForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const msgBox = careerForm.querySelector('.form-msg');
+      if (!careerForm.checkValidity()) {
+        careerForm.classList.add('was-validated');
+        if (msgBox) {
+          msgBox.textContent = 'Please fill in all required fields correctly.';
+          msgBox.className = 'form-msg error';
+        }
+        return;
+      }
+      if (msgBox) {
+        msgBox.textContent = "Application received! Our team will call you within 48 hours to discuss the role.";
+        msgBox.className = 'form-msg success';
+      }
+      careerForm.reset();
+      careerForm.classList.remove('was-validated');
+    });
+  }
 
   /* ---------------- Service detail scrollspy (service pages) ---------------- */
   const spyLinks = document.querySelectorAll('.service-detail-nav .list-group-item');
