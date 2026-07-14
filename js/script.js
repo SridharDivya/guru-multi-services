@@ -2,7 +2,7 @@
    GURU MULTI SERVICES — MAIN SCRIPT (NO-BACKEND VERSION)
    Preloader · Navbar · Scroll progress · Reveal animations · Counters
    FAQ accordion · Gallery filter + lightbox · Before/After slider
-   Booking + Contact + Newsletter form handling (→ wa.me redirect)
+   Booking + Contact + Newsletter + Careers handling (→ wa.me redirect)
    Back to top · WhatsApp
    ========================================================================== */
 
@@ -213,8 +213,6 @@ document.addEventListener('DOMContentLoaded', function () {
       const text = buildMessage(form);
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 
-      // Open WhatsApp (app on mobile, WhatsApp Web on desktop) with the
-      // message pre-filled. The visitor still needs to tap Send.
       window.open(url, '_blank', 'noopener');
 
       if (msgBox) {
@@ -226,12 +224,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* Reads every real input/select/textarea in a form and pairs it with its
-     visible label (or placeholder, as a fallback) so the WhatsApp message
-     always matches whatever fields that particular page's form has —
-     no hardcoded field IDs, so it works across every page without edits. */
   function buildGenericMessage(form, title) {
-    const lines = [title];
+    const lines = [`*${title}*`, `━━━━━━━━━━━━━━━━━━━━━━`];
     const fields = form.querySelectorAll('input, select, textarea');
     fields.forEach((field) => {
       if (!field.id && !field.name) return;
@@ -244,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
       else labelText = field.name || field.id;
 
       const value = field.value && field.value.trim() ? field.value.trim() : '-';
-      lines.push(`${labelText}: ${value}`);
+      lines.push(`🔸 *${labelText}:* ${value}`);
     });
     return lines.join('\n');
   }
@@ -264,26 +258,64 @@ document.addEventListener('DOMContentLoaded', function () {
     successText: "Opening WhatsApp — tap Send to subscribe!",
   });
 
-  /* ---------------- Career form (unchanged, client-side only) ---------------- */
-  const careerForm = document.getElementById('careerForm');
-  if (careerForm) {
-    careerForm.addEventListener('submit', function (e) {
+  /* ---------------- Career Modal Form → WhatsApp Redirect ---------------- */
+  const jobApplyForm = document.getElementById('jobApplyForm');
+  if (jobApplyForm) {
+    jobApplyForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      const msgBox = careerForm.querySelector('.form-msg');
-      if (!careerForm.checkValidity()) {
-        careerForm.classList.add('was-validated');
+      const form = e.target;
+      const msgBox = form.querySelector('.form-msg');
+
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
         if (msgBox) {
           msgBox.textContent = 'Please fill in all required fields correctly.';
           msgBox.className = 'form-msg error';
         }
         return;
       }
+
+      // Fetch career modal field values safely
+      const role = document.getElementById('modalRole')?.value || '-';
+      const name = document.getElementById('modalName')?.value.trim() || '-';
+      const phone = document.getElementById('modalPhone')?.value.trim() || '-';
+      const place = document.getElementById('modalPlace')?.value.trim() || '-';
+      const experience = document.getElementById('modalExperience')?.value || '-';
+      const available = document.getElementById('modalAvailable')?.value || '-';
+      const notes = document.getElementById('modalNote')?.value.trim() || 'None';
+
+      // Build text payload with clear typography
+      const textMessage = [
+        `*New Job Application — Guru Multi Services*`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `💼 *Role:* ${role}`,
+        `👤 *Full Name:* ${name}`,
+        `📞 *Phone:* ${phone}`,
+        `📍 *Place / Area:* ${place}`,
+        `⏳ *Experience:* ${experience}`,
+        `📅 *Available From:* ${available}`,
+        `📝 *Notes:* ${notes}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener');
+
       if (msgBox) {
-        msgBox.textContent = "Application received! Our team will call you within 48 hours to discuss the role.";
+        msgBox.textContent = "Opening WhatsApp — tap Send to submit your application!";
         msgBox.className = 'form-msg success';
       }
-      careerForm.reset();
-      careerForm.classList.remove('was-validated');
+
+      form.reset();
+      form.classList.remove('was-validated');
+
+      // Dismiss bootstrap pop-up modal panel gracefully after redirection
+      setTimeout(() => {
+        const modalEl = document.getElementById('jobApplyModal');
+        if (modalEl) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+        }
+      }, 2000);
     });
   }
 
