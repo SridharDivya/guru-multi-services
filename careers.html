@@ -182,7 +182,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="jobApplyForm" class="row g-3" novalidate
+        <form id="jobApplyForm" class="row g-3" novalidate enctype="multipart/form-data"
               action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
 
           <!-- Sent to Formspree, not shown to applicant -->
@@ -214,10 +214,11 @@
               <label for="modalPhone">Phone Number</label>
             </div>
           </div>
-          <div class="col-12">
+
+          <div class="col-md-6">
             <div class="form-floating">
-              <input type="text" class="form-control" id="modalPlace" name="Place / Area" placeholder="Place / Area" required>
-              <label for="modalPlace">Place / Area (e.g. Chittoor, Thotapalyam)</label>
+              <input type="number" class="form-control" id="modalAge" name="Age" placeholder="Age" min="18" max="65" required>
+              <label for="modalAge">Age</label>
             </div>
           </div>
           <div class="col-md-6">
@@ -232,12 +233,34 @@
               <label for="modalExperience">Work Experience</label>
             </div>
           </div>
+
+          <div class="col-12">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="modalPlace" name="Place / Area" placeholder="Place / Area" required>
+              <label for="modalPlace">Place / Area (e.g. Chittoor, Thotapalyam)</label>
+            </div>
+          </div>
           <div class="col-md-6">
             <div class="form-floating">
               <input type="date" class="form-control" id="modalAvailable" name="Available From" required>
               <label for="modalAvailable">Available From</label>
             </div>
           </div>
+
+          <div class="col-12">
+            <label for="modalPhoto" class="form-label" style="color:var(--text-muted); font-size:0.9rem;">
+              <i class="fa-solid fa-camera me-1"></i> Upload Your Photo <span style="color:#c0392b;">*</span>
+            </label>
+            <input type="file" class="form-control" id="modalPhoto" name="Photo" accept="image/*" required>
+          </div>
+          <div class="col-12">
+            <label for="modalIdProof" class="form-label" style="color:var(--text-muted); font-size:0.9rem;">
+              <i class="fa-solid fa-id-card me-1"></i> Upload ID Proof (Aadhaar / Voter ID / DL) <span style="color:#c0392b;">*</span>
+            </label>
+            <input type="file" class="form-control" id="modalIdProof" name="ID Proof" accept="image/*,.pdf" required>
+            <div class="form-text" style="color:var(--text-muted); font-size:0.8rem;">Accepted formats: JPG, PNG or PDF. Used only for identity verification before your first job.</div>
+          </div>
+
           <div class="col-12">
             <div class="form-floating">
               <textarea class="form-control" id="modalNote" name="Additional Notes" placeholder="Anything else we should know?" style="height:90px"></textarea>
@@ -282,7 +305,7 @@
     if (!form.checkValidity()) {
       form.classList.add('was-validated');
       if (msgBox) {
-        msgBox.textContent = 'Please fill in all required fields correctly.';
+        msgBox.textContent = 'Please fill in all required fields correctly, including photo and ID proof.';
         msgBox.className = 'form-msg error';
       }
       return;
@@ -291,6 +314,8 @@
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
 
+    // FormData automatically includes the uploaded Photo and ID Proof files
+    // as multipart/form-data, so Formspree receives them as attachments.
     fetch(form.action, {
       method: 'POST',
       body: new FormData(form),
