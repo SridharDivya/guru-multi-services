@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMC Vellore & Chittoor Appointment & Lodging Assistance | Guru Multi Services</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Theme Styling (Linked relatively to root folder) -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --gold-primary: #C5A880;
+            --gold-dark: #A38458;
+            --wood-charcoal: #2C2520;
+            --soft-cream: #FDFBF7;
+        }
+
+        body {
+            background-color: var(--soft-cream);
+            color: var(--wood-charcoal);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--wood-charcoal);
+            border-bottom: 3px solid var(--gold-primary);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+
+        .nav-link:hover {
+            color: var(--gold-primary) !important;
+        }
+
+        .hero-banner {
+            background: linear-gradient(rgba(44, 37, 32, 0.85), rgba(44, 37, 32, 0.95)), 
+                        url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1200') no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 80px 0;
+            border-bottom: 4px solid var(--gold-primary);
+        }
+
+        .btn-gold {
+            background-color: var(--gold-primary);
+            color: var(--wood-charcoal);
+            font-weight: 600;
+            border: 2px solid var(--gold-primary);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            background-color: transparent;
+            color: var(--gold-primary);
+            border-color: var(--gold-primary);
+        }
+
+        .btn-wood {
+            background-color: var(--wood-charcoal);
+            color: #ffffff;
+            border: 2px solid var(--wood-charcoal);
+            transition: all 0.3s ease;
+        }
+
+        .btn-wood:hover {
+            background-color: transparent;
+            color: var(--wood-charcoal);
+            border-color: var(--wood-charcoal);
+        }
+
+        .service-card {
+            background: #ffffff;
+            border: 1px solid rgba(197, 168, 128, 0.2);
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(44, 37, 32, 0.08);
+            border-color: var(--gold-primary);
+        }
+
+        .disclaimer-box {
+            background-color: #fff9f0;
+            border-left: 5px solid #d9822b;
+            border-radius: 4px;
+        }
+
+        .form-container {
+            background: #ffffff;
+            border-top: 4px solid var(--gold-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .site-footer {
+            background-color: var(--wood-charcoal);
+            color: #d1c7bd;
+            border-top: 4px solid var(--gold-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html">
+                <i class="fa-solid fa-crown me-2 text-warning"></i>
+                <span class="fw-bold tracking-wider">GURU MULTI SERVICES</span>
+            </a>
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active text-warning" href="#">CMC Assistance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#services">All Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../careers.html">Careers</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <a href="#booking-form" class="btn btn-gold btn-sm px-3">Enquire Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner Section -->
+    <header class="hero-banner text-center">
+        <div class="container">
+            <span class="badge bg-warning text-dark mb-3 px-3 py-2 text-uppercase fw-bold">Hassle-Free Medical Travel</span>
+            <h1 class="display-4 fw-bold mb-3">CMC Vellore & Chittoor Logistics Help</h1>
+            <p class="lead mx-auto mb-4" style="max-width: 700px;">
+                We bridge the gap for outstation patients visiting Christian Medical College. From seamless online appointment registrations to finding accessible, local lodging.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#booking-form" class="btn btn-gold btn-lg px-4">Request Support</a>
+                <a href="tel:+919876543210" class="btn btn-outline-light btn-lg px-4"><i class="fa-solid fa-phone me-2"></i>Call Coordinator</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container py-5">
+        
+        <!-- Crucial Disclaimer -->
+        <div class="disclaimer-box p-4 mb-5 shadow-sm">
+            <div class="d-flex">
+                <div class="me-3 fs-3 text-warning">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-dark">Important Information Disclaimer</h5>
+                    <p class="mb-0 text-muted small">
+                        <strong>Guru Multi Services</strong> is an independent auxiliary support provider. We are <strong>not affiliated with, authorized by, or officially associated</strong> with Christian Medical College (CMC) Vellore or Chittoor. We assist patients with public portal bookings, local travel arrangements, and third-party lodging guidance on an assistant-service basis.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Three Pillars of Support Services -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="service-card p-4 h-100 text-center">
+                    <div class="fs-1 text-warning mb-3">
+                        <i class="fa-solid fa-laptop-medical"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Appointment Booking Guidance</h4>
+                    <p class="text-muted">
+                        Navigating busy portals can be daunting. We guide you through the process of setting up patient IDs and obtaining formal appointment bookings at both the Vellore and Chittoor campuses.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card p-4 h-100 text-center">
+                    <div class="fs-1 text-warning mb-3">
+                        <i class="fa-solid fa-wheelchair"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Wheelchair-Accessible Rooms</h4>
+                    <p class="text-muted">
+                        We connect families with verified local guest houses, apartments, and hotels that feature patient-friendly environments, elevators, step-free access, and kitchen facilities.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card p-4 h-100 text-center">
+                    <div class="fs-1 text-warning mb-3">
+                        <i class="fa-solid fa-car-side"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Airport & Rail Transfers</h4>
+                    <p class="text-muted">
+                        Book reliable pickups and transfers directly from Chennai/Bengaluru airports or Katpadi Junction station straight to your hotel or the hospital campus.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Guide & Info -->
+        <div class="row align-items-center mb-5 g-5">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Why Coordinate Your Travel With Us?</h2>
+                <p class="text-muted">
+                    Seeking treatment away from home is physically and emotionally exhausting. Our team works to eliminate logistical stress so you and your family can focus completely on recovery.
+                </p>
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="fa-solid fa-check-circle text-success me-3 mt-1 fs-5"></i>
+                        <span><strong>Dual Campus Coverage:</strong> Coordination support for both main town Vellore and the newer Chittoor campus.</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="fa-solid fa-check-circle text-success me-3 mt-1 fs-5"></i>
+                        <span><strong>Tailored Stays:</strong> Options for long-term kitchen-equipped rooms, ideal for recovery periods.</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-start">
+                        <i class="fa-solid fa-check-circle text-success me-3 mt-1 fs-5"></i>
+                        <span><strong>Transparent Costs:</strong> Zero hidden agency markups. You pay exact, direct rates for travel and lodging.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <!-- High-Quality Supportive Aesthetic Visual -->
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800" alt="Patient Care Support" class="img-fluid rounded shadow border">
+            </div>
+        </div>
+
+        <!-- Dedicated Booking Request Form -->
+        <div id="booking-form" class="row justify-content-center py-4">
+            <div class="col-lg-8">
+                <div class="form-container p-5">
+                    <h3 class="fw-bold mb-2 text-center">Request Coordinator Support</h3>
+                    <p class="text-center text-muted mb-4">Fill out this quick form, and our dedicated medical travel team will get in touch with you shortly.</p>
+                    
+                    <form action="#" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted">Patient/Representative Name</label>
+                                <input type="text" class="form-control" placeholder="Enter full name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted">Contact Mobile Number</label>
+                                <input type="tel" class="form-control" placeholder="10-digit number" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted">Preferred Campus Location</label>
+                                <select class="form-select" required>
+                                    <option value="" disabled selected>Select location...</option>
+                                    <option value="vellore">CMC Vellore (Tamil Nadu)</option>
+                                    <option value="chittoor">CMC Chittoor (Andhra Pradesh)</option>
+                                    <option value="both">Undecided / Both</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted">Tentative Date of Arrival</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted font-bold">Services Needed</label>
+                                <div class="row px-2">
+                                    <div class="form-check col-md-4 col-12">
+                                        <input class="form-check-input" type="checkbox" id="srv-opt">
+                                        <label class="form-check-label text-muted" for="srv-opt">Appointment Booking</label>
+                                    </div>
+                                    <div class="form-check col-md-4 col-12">
+                                        <input class="form-check-input" type="checkbox" id="srv-lodg">
+                                        <label class="form-check-label text-muted" for="srv-lodg">Accessible Lodging</label>
+                                    </div>
+                                    <div class="form-check col-md-4 col-12">
+                                        <input class="form-check-input" type="checkbox" id="srv-trav">
+                                        <label class="form-check-label text-muted" for="srv-trav">Cab / Transport Booking</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted">Specific Requirements or Health Conditions</label>
+                                <textarea class="form-control" rows="4" placeholder="Mention any wheelchair requirements, dietary kitchen preferences, or specific inquiries..."></textarea>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-gold btn-lg w-100">Submit Request</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Consistent Site Footer -->
+    <footer class="site-footer py-5 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-crown text-warning me-2"></i>GURU MULTI SERVICES</h5>
+                    <p class="small text-muted">
+                        Providing specialized, consumer-focused multi-services spanning home decor materials to critical medical travel logistical support.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">Navigation</h6>
+                    <ul class="list-unstyled text-muted small">
+                        <li><a href="../index.html" class="text-reset text-decoration-none d-block py-1">Home</a></li>
+                        <li><a href="../index.html#services" class="text-reset text-decoration-none d-block py-1">Our Services</a></li>
+                        <li><a href="../index.html#about" class="text-reset text-decoration-none d-block py-1">About Us</a></li>
+                        <li><a href="../careers.html" class="text-reset text-decoration-none d-block py-1">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">Other Top Services</h6>
+                    <ul class="list-unstyled text-muted small">
+                        <li><a href="plywood.html" class="text-reset text-decoration-none d-block py-1">Plywood & Hardware</a></li>
+                        <li><a href="interior-design.html" class="text-reset text-decoration-none d-block py-1">Interior Designing</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold text-white mb-3">Contact Support</h6>
+                    <p class="small text-muted mb-1"><i class="fa-solid fa-phone me-2 text-warning"></i>+91 98765 43210</p>
+                    <p class="small text-muted mb-3"><i class="fa-solid fa-envelope me-2 text-warning"></i>support@gurumultiservices.com</p>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="row text-center text-md-start small">
+                <div class="col-md-6 text-muted">
+                    &copy; 2026 Guru Multi Services. All rights reserved.
+                </div>
+                <div class="col-md-6 text-md-end text-muted mt-2 mt-md-0">
+                    *Independent service agency. Not affiliated with CMC Hospital.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
