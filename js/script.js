@@ -2,7 +2,8 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             and New Specialized Geyser Service Booking Gateway.
+             Specialized Geyser Service Booking Gateway, and New Specialized 
+             Software Projects Service Booking Gateway.
    ========================================================================== */
 
 // Your WhatsApp Business API number (International format, digits only)
@@ -293,7 +294,14 @@ document.addEventListener('DOMContentLoaded', function () {
       items.forEach((field) => {
         if (!field.id && !field.name) return;
         if (['submit', 'hidden', 'button'].includes(field.type)) return;
-        const value = field.value && field.value.trim() ? field.value.trim() : '-';
+        
+        let value = '-';
+        if (field.tagName === 'SELECT') {
+          value = field.options[field.selectedIndex].text;
+        } else if (field.value && field.value.trim()) {
+          value = field.value.trim();
+        }
+        
         lines.push(`🔸 *${field.name || field.id}:* ${value}`);
       });
 
@@ -306,4 +314,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Bind generalized utility streams safely
   initializeSecondaryForm('contactForm', 'New General Inquiry');
+
+  /* ---------------- 13. Software Projects Booking Gateway ---------------- */
+  const projectsForm = document.getElementById('projectsBookingForm');
+  if (projectsForm) {
+    projectsForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!projectsForm.checkValidity()) {
+        projectsForm.classList.add('was-validated');
+        return;
+      }
+
+      // Safeguard element selection
+      const nameEl = document.getElementById('projStudentName');
+      const phoneEl = document.getElementById('projPhone');
+      const emailEl = document.getElementById('projEmail');
+      const domainEl = document.getElementById('projDomain');
+      const titleEl = document.getElementById('projTitle');
+      const deadEl = document.getElementById('projDeadline');
+      const descEl = document.getElementById('projDesc');
+
+      const data = {
+        name: nameEl ? nameEl.value.trim() : '-',
+        phone: phoneEl ? phoneEl.value.trim() : '-',
+        email: emailEl ? emailEl.value.trim() : '-',
+        domain: domainEl ? domainEl.options[domainEl.selectedIndex].text : '-',
+        title: titleEl ? titleEl.value.trim() : 'Undecided / Open',
+        deadline: deadEl ? deadEl.value : '-',
+        description: descEl && descEl.value.trim() ? descEl.value.trim() : 'None provided'
+      };
+
+      // Formatted Whatsapp structural template for software development submissions
+      const textMessage = [
+        `*💻 Software Project Consultation Request*`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `👤 *Student Name:* ${data.name}`,
+        `📞 *Contact Phone:* ${data.phone}`,
+        `📧 *Email Address:* ${data.email}`,
+        `⚙️ *Target Domain:* ${data.domain}`,
+        `📝 *Project Title:* ${data.title}`,
+        `📅 *Submission Deadline:* ${data.deadline}`,
+        `💬 *Project Scope/Requirements:* ${data.description}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener');
+
+      projectsForm.reset();
+      projectsForm.classList.remove('was-validated');
+    });
+  }
 });
