@@ -1,7 +1,8 @@
 /* ==========================================================================
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
-             Before/After Sliders, & Specialized CMC Medical Booking Gateway.
+             Before/After Sliders, Specialized CMC Medical Booking Gateway,
+             and New Specialized Geyser Service Booking Gateway.
    ========================================================================== */
 
 // Your WhatsApp Business API number (International format, digits only)
@@ -229,7 +230,52 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 11. Core Secondary Form Handlers ---------------- */
+  /* ---------------- 11. Geyser Service Booking Gateway ---------------- */
+  const geyserForm = document.getElementById('bookingForm');
+  if (geyserForm) {
+    geyserForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!geyserForm.checkValidity()) {
+        geyserForm.classList.add('was-validated');
+        return;
+      }
+
+      // Safeguard element selection
+      const nameEl = document.getElementById('bkName');
+      const phoneEl = document.getElementById('bkPhone');
+      const typeEl = document.getElementById('bkRepairType');
+      const dateEl = document.getElementById('bkDate');
+      const addressEl = document.getElementById('bkAddress');
+
+      const data = {
+        name: nameEl ? nameEl.value.trim() : '-',
+        phone: phoneEl ? phoneEl.value.trim() : '-',
+        type: typeEl ? typeEl.options[typeEl.selectedIndex].text : '-',
+        date: dateEl ? dateEl.value : '-',
+        address: addressEl ? addressEl.value.trim() : '-'
+      };
+
+      // Formatted Whatsapp structural template
+      const textMessage = [
+        `*🔥 Geyser Service Booking Request*`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `👤 *Customer Name:* ${data.name}`,
+        `📞 *Phone Number:* ${data.phone}`,
+        `🛠️ *Service Type:* ${data.type}`,
+        `📅 *Preferred Date:* ${data.date}`,
+        `📍 *Service Address:* ${data.address}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener');
+
+      geyserForm.reset();
+      geyserForm.classList.remove('was-validated');
+    });
+  }
+
+  /* ---------------- 12. Core Secondary Form Handlers ---------------- */
   function initializeSecondaryForm(formId, reportTitle) {
     const targetForm = document.getElementById(formId);
     if (!targetForm) return;
