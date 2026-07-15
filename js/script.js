@@ -2,8 +2,9 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             Specialized Geyser Service Booking Gateway, and New Specialized 
-             Software Projects Service Booking Gateway.
+             Specialized Geyser Service Booking Gateway, New Specialized 
+             Software Projects Service Booking Gateway, and Job Application
+             WhatsApp Notification Gateway.
    ========================================================================== */
 
 // Your WhatsApp Business API number (International format, digits only)
@@ -363,6 +364,72 @@ document.addEventListener('DOMContentLoaded', function () {
 
       projectsForm.reset();
       projectsForm.classList.remove('was-validated');
+    });
+  }
+
+  /* ---------------- 14. Job Application WhatsApp Notification Gateway ---------------- */
+  // Careers page (careers.html) already POSTs the full application — including the
+  // Photo and ID Proof file uploads — to Formspree via its own inline script.
+  // This handler runs alongside that submission (it does NOT replace or block it)
+  // and simply opens a pre-filled WhatsApp message so you get an instant, readable
+  // notification on your phone as well. Files can't travel through a wa.me link,
+  // so the message notes that the photo/ID were uploaded and are on their way
+  // to your Formspree inbox/email.
+  const jobApplyForm = document.getElementById('jobApplyForm');
+  if (jobApplyForm) {
+    jobApplyForm.addEventListener('submit', function (e) {
+      // Do not preventDefault here — the inline script on careers.html already
+      // owns preventDefault + the Formspree fetch submission for this form.
+      // We only need to fire the WhatsApp step if the form is actually valid.
+      if (!jobApplyForm.checkValidity()) return;
+
+      const roleEl = document.getElementById('modalRole');
+      const nameEl = document.getElementById('modalName');
+      const phoneEl = document.getElementById('modalPhone');
+      const ageEl = document.getElementById('modalAge');
+      const experienceEl = document.getElementById('modalExperience');
+      const placeEl = document.getElementById('modalPlace');
+      const availableEl = document.getElementById('modalAvailable');
+      const noteEl = document.getElementById('modalNote');
+      const photoEl = document.getElementById('modalPhoto');
+      const idProofEl = document.getElementById('modalIdProof');
+
+      const data = {
+        role: roleEl ? roleEl.options[roleEl.selectedIndex].text : '-',
+        name: nameEl ? nameEl.value.trim() : '-',
+        phone: phoneEl ? phoneEl.value.trim() : '-',
+        age: ageEl ? ageEl.value.trim() : '-',
+        experience: experienceEl ? experienceEl.options[experienceEl.selectedIndex].text : '-',
+        place: placeEl ? placeEl.value.trim() : '-',
+        available: availableEl ? availableEl.value : '-',
+        note: noteEl && noteEl.value.trim() ? noteEl.value.trim() : 'None',
+        photoAttached: !!(photoEl && photoEl.files && photoEl.files.length),
+        idAttached: !!(idProofEl && idProofEl.files && idProofEl.files.length)
+      };
+
+      const textMessage = [
+        `*🧰 New Job Application*`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `🛠️ *Role Applying For:* ${data.role}`,
+        `👤 *Full Name:* ${data.name}`,
+        `📞 *Phone Number:* ${data.phone}`,
+        `🎂 *Age:* ${data.age}`,
+        `📈 *Work Experience:* ${data.experience}`,
+        `📍 *Place / Area:* ${data.place}`,
+        `📅 *Available From:* ${data.available}`,
+        `📝 *Additional Notes:* ${data.note}`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `📷 *Photo:* ${data.photoAttached ? 'Uploaded — check email/Formspree' : 'Not attached'}`,
+        `🆔 *ID Proof:* ${data.idAttached ? 'Uploaded — check email/Formspree' : 'Not attached'}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
+
+      // Small delay so this doesn't fight the browser's file-upload/Formspree
+      // submission for focus, then opens the WhatsApp tab right after.
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank', 'noopener');
+      }, 400);
     });
   }
 });
