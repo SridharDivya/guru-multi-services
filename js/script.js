@@ -1,111 +1,130 @@
 /* ==========================================================================
-   GURU MULTI SERVICES — MAIN SCRIPT (NO-BACKEND VERSION)
-   Preloader · Navbar · Scroll progress · Reveal animations · Counters
-   FAQ accordion · Gallery filter + lightbox · Before/After slider
-   Booking + Contact + Newsletter + Careers handling (→ wa.me redirect)
-   Back to top · WhatsApp
+   GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
+   Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
+             Before/After Sliders, & Specialized CMC Medical Booking Gateway.
    ========================================================================== */
 
-// Your WhatsApp business number, international format, digits only (no +)
+// Your WhatsApp Business API number (International format, digits only)
 const WHATSAPP_NUMBER = '919441448690';
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ---------------- Preloader ---------------- */
+  /* ---------------- 1. Performance-Driven Preloader ---------------- */
   const preloader = document.getElementById('preloader');
   window.addEventListener('load', function () {
-    setTimeout(() => preloader && preloader.classList.add('loaded'), 350);
+    setTimeout(() => preloader && preloader.classList.add('loaded'), 300);
   });
-  setTimeout(() => preloader && preloader.classList.add('loaded'), 2500);
+  // Fallback structural safety gate if load event hangs
+  setTimeout(() => preloader && preloader.classList.add('loaded'), 2200);
 
-  /* ---------------- Footer year ---------------- */
+  /* ---------------- 2. Global Document Helpers ---------------- */
   document.querySelectorAll('.js-year').forEach(el => el.textContent = new Date().getFullYear());
 
-  /* ---------------- Navbar scroll state ---------------- */
+  /* ---------------- 3. Smooth Fixed Navbar Transitions ---------------- */
   const navbar = document.getElementById('mainNavbar');
   function handleNavScroll() {
     if (!navbar) return;
-    if (window.scrollY > 60) navbar.classList.add('scrolled');
-    else if (!navbar.classList.contains('inner-page')) navbar.classList.remove('scrolled');
+    if (window.scrollY > 60) {
+      navbar.classList.add('scrolled');
+    } else if (!navbar.classList.contains('inner-page')) {
+      navbar.classList.remove('scrolled');
+    }
   }
   handleNavScroll();
   window.addEventListener('scroll', handleNavScroll);
 
+  // Auto-close responsive mobile nav dropdown on option select
   const navCollapseEl = document.getElementById('navMain');
   if (navCollapseEl) {
     document.querySelectorAll('#navMain .nav-link').forEach(link => {
       link.addEventListener('click', () => {
         const bsCollapse = bootstrap.Collapse.getInstance(navCollapseEl);
-        if (bsCollapse && navCollapseEl.classList.contains('show')) bsCollapse.hide();
+        if (bsCollapse && navCollapseEl.classList.contains('show')) {
+          bsCollapse.hide();
+        }
       });
     });
   }
 
-  /* ---------------- Scroll progress bar ---------------- */
+  /* ---------------- 4. Scroll Tracking Progress Indicator ---------------- */
   const progressBar = document.getElementById('scroll-progress');
   window.addEventListener('scroll', function () {
     if (!progressBar) return;
-    const h = document.documentElement;
-    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    progressBar.style.width = scrolled + '%';
+    const doc = document.documentElement;
+    const totalScroll = (doc.scrollTop) / (doc.scrollHeight - doc.clientHeight) * 100;
+    progressBar.style.width = totalScroll + '%';
   });
 
-  /* ---------------- Back to top ---------------- */
+  /* ---------------- 5. Back-to-Top Dynamic Button ---------------- */
   const backToTop = document.getElementById('backToTop');
   window.addEventListener('scroll', function () {
     if (!backToTop) return;
     backToTop.classList.toggle('show', window.scrollY > 500);
   });
-  backToTop && backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (backToTop) {
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
 
-  /* ---------------- Reveal on scroll ---------------- */
+  /* ---------------- 6. Asynchronous Reveal-on-Scroll ---------------- */
   const revealEls = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, idx) => {
         if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('in-view'), (i % 4) * 90);
-          io.unobserve(entry.target);
+          // Staggered sequential parsing delay for cascading items
+          setTimeout(() => entry.target.classList.add('in-view'), (idx % 4) * 80);
+          revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15 });
-    revealEls.forEach(el => io.observe(el));
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => revealObserver.observe(el));
   } else {
+    // Graceful alternative for legacy layouts
     revealEls.forEach(el => el.classList.add('in-view'));
   }
 
-  /* ---------------- Animated counters ---------------- */
+  /* ---------------- 7. High-Performance Statistics Counters ---------------- */
   const counters = document.querySelectorAll('.counter[data-target]');
   const runCounter = (el) => {
     const target = parseInt(el.getAttribute('data-target'), 10);
     const suffix = el.getAttribute('data-suffix') || '';
-    const duration = 1600;
-    const start = performance.now();
-    function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target) + suffix;
-      if (progress < 1) requestAnimationFrame(tick);
-      else el.textContent = target + suffix;
+    const duration = 1500;
+    const startTimestamp = performance.now();
+    
+    function step(now) {
+      const progress = Math.min((now - startTimestamp) / duration, 1);
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(easeOutCubic * target) + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target + suffix;
+      }
     }
-    requestAnimationFrame(tick);
+    requestAnimationFrame(step);
   };
+
   if (counters.length && 'IntersectionObserver' in window) {
-    const cIo = new IntersectionObserver((entries) => {
+    const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) { runCounter(entry.target); cIo.unobserve(entry.target); }
+        if (entry.isIntersecting) {
+          runCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
       });
-    }, { threshold: 0.4 });
-    counters.forEach(c => cIo.observe(c));
+    }, { threshold: 0.35 });
+    counters.forEach(c => counterObserver.observe(c));
   }
 
-  /* ---------------- FAQ accordion ---------------- */
+  /* ---------------- 8. Clean CSS FAQ Accordion Engine ---------------- */
   document.querySelectorAll('.faq-item').forEach(item => {
     const question = item.querySelector('.faq-question');
     const answer = item.querySelector('.faq-answer');
     if (!question || !answer) return;
+    
     question.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
+      // Collapses sibling nodes automatically for mutual exclusivity
       item.closest('.faq-list').querySelectorAll('.faq-item').forEach(other => {
         other.classList.remove('open');
         other.querySelector('.faq-answer').style.maxHeight = null;
@@ -117,218 +136,128 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  /* ---------------- Gallery filter ---------------- */
-  const filterBtns = document.querySelectorAll('.gallery-filters button');
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.getAttribute('data-filter');
-      galleryItems.forEach(item => {
-        const match = filter === 'all' || item.getAttribute('data-category') === filter;
-        item.style.display = match ? '' : 'none';
-      });
-    });
-  });
-
-  /* ---------------- Lightbox ---------------- */
-  const lightbox = document.getElementById('lightbox');
-  if (lightbox) {
-    const lightboxImg = lightbox.querySelector('img');
-    const visibleItems = () => Array.from(galleryItems).filter(i => i.style.display !== 'none');
-    let currentIndex = 0;
-    galleryItems.forEach((item) => {
-      item.addEventListener('click', () => {
-        const list = visibleItems();
-        currentIndex = list.indexOf(item);
-        openLightbox(list);
-      });
-    });
-    function openLightbox(list) {
-      lightboxImg.src = list[currentIndex].querySelector('img').src;
-      lightbox.classList.add('open');
-    }
-    lightbox.querySelector('.lightbox-close').addEventListener('click', () => lightbox.classList.remove('open'));
-    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
-    lightbox.querySelector('.lightbox-nav.prev').addEventListener('click', () => {
-      const list = visibleItems();
-      currentIndex = (currentIndex - 1 + list.length) % list.length;
-      openLightbox(list);
-    });
-    lightbox.querySelector('.lightbox-nav.next').addEventListener('click', () => {
-      const list = visibleItems();
-      currentIndex = (currentIndex + 1) % list.length;
-      openLightbox(list);
-    });
-    document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'Escape') lightbox.classList.remove('open');
-      if (e.key === 'ArrowRight') lightbox.querySelector('.lightbox-nav.next').click();
-      if (e.key === 'ArrowLeft') lightbox.querySelector('.lightbox-nav.prev').click();
-    });
-  }
-
-  /* ---------------- Before / After slider ---------------- */
+  /* ---------------- 9. Before/After Visual Image Sliders ---------------- */
   document.querySelectorAll('.ba-slider').forEach(slider => {
-    const afterEl = slider.querySelector('.ba-after');
     const handle = slider.querySelector('.ba-handle');
-    let dragging = false;
+    const beforeImg = slider.querySelector('.ba-before');
+    if (!handle || !beforeImg) return;
 
-    const setPosition = (clientX) => {
+    let isResizing = false;
+    const startResize = () => { isResizing = true; };
+    const stopResize = () => { isResizing = false; };
+
+    handle.addEventListener('mousedown', startResize);
+    window.addEventListener('mouseup', stopResize);
+    handle.addEventListener('touchstart', startResize);
+    window.addEventListener('touchend', stopResize);
+
+    const performResize = (clientX) => {
       const rect = slider.getBoundingClientRect();
-      let x = ((clientX - rect.left) / rect.width) * 100;
-      x = Math.max(0, Math.min(100, x));
-      afterEl.style.width = x + '%';
-      handle.style.left = x + '%';
+      const x = clientX - rect.left;
+      let percentage = (x / rect.width) * 100;
+      if (percentage < 0) percentage = 0;
+      if (percentage > 100) percentage = 100;
+      
+      handle.style.left = percentage + '%';
+      beforeImg.style.width = percentage + '%';
     };
 
-    handle.addEventListener('mousedown', () => dragging = true);
-    window.addEventListener('mouseup', () => dragging = false);
-    window.addEventListener('mousemove', (e) => { if (dragging) setPosition(e.clientX); });
+    window.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      performResize(e.clientX);
+    });
 
-    handle.addEventListener('touchstart', () => dragging = true, { passive: true });
-    window.addEventListener('touchend', () => dragging = false);
-    window.addEventListener('touchmove', (e) => { if (dragging && e.touches[0]) setPosition(e.touches[0].clientX); }, { passive: true });
-
-    slider.addEventListener('click', (e) => { if (e.target !== handle && !handle.contains(e.target)) setPosition(e.clientX); });
+    window.addEventListener('touchmove', (e) => {
+      if (!isResizing) return;
+      if (e.touches.length > 0) {
+        performResize(e.touches[0].clientX);
+      }
+    });
   });
 
-  /* ---------------- Form → WhatsApp redirect helper ---------------- */
-  function handleFormToWhatsApp(form, { buildMessage, successText }) {
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
+  /* ---------------- 10. CMC Medical Appointment Form Gateway ---------------- */
+  const bookingForm = document.querySelector('#booking-form form');
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      const msgBox = form.querySelector('.form-msg');
 
-      if (!form.checkValidity()) {
-        form.classList.add('was-validated');
-        if (msgBox) {
-          msgBox.textContent = 'Please fill in all required fields correctly.';
-          msgBox.className = 'form-msg error';
-        }
+      if (!bookingForm.checkValidity()) {
+        bookingForm.classList.add('was-validated');
         return;
       }
 
-      const text = buildMessage(form);
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-
-      window.open(url, '_blank', 'noopener');
-
-      if (msgBox) {
-        msgBox.textContent = successText;
-        msgBox.className = 'form-msg success';
-      }
-      form.reset();
-      form.classList.remove('was-validated');
-    });
-  }
-
-  function buildGenericMessage(form, title) {
-    const lines = [`*${title}*`, `━━━━━━━━━━━━━━━━━━━━━━`];
-    const fields = form.querySelectorAll('input, select, textarea');
-    fields.forEach((field) => {
-      if (!field.id && !field.name) return;
-      if (field.type === 'submit' || field.type === 'hidden' || field.type === 'button') return;
-
-      let labelText = '';
-      const label = field.id ? form.querySelector(`label[for="${field.id}"]`) : null;
-      if (label) labelText = label.textContent.trim();
-      else if (field.getAttribute('placeholder')) labelText = field.getAttribute('placeholder');
-      else labelText = field.name || field.id;
-
-      const value = field.value && field.value.trim() ? field.value.trim() : '-';
-      lines.push(`🔸 *${labelText}:* ${value}`);
-    });
-    return lines.join('\n');
-  }
-
-  handleFormToWhatsApp(document.getElementById('bookingForm'), {
-    buildMessage: (form) => buildGenericMessage(form, 'New Service Booking Request'),
-    successText: "Opening WhatsApp — just tap Send to confirm your booking request!",
-  });
-
-  handleFormToWhatsApp(document.getElementById('contactForm'), {
-    buildMessage: (form) => buildGenericMessage(form, 'New Contact Message'),
-    successText: "Opening WhatsApp — just tap Send to reach us!",
-  });
-
-  handleFormToWhatsApp(document.getElementById('newsletterForm'), {
-    buildMessage: (form) => buildGenericMessage(form, 'New Newsletter Subscription'),
-    successText: "Opening WhatsApp — tap Send to subscribe!",
-  });
-
-  /* ---------------- Career Modal Form → WhatsApp Redirect ---------------- */
-  const jobApplyForm = document.getElementById('jobApplyForm');
-  if (jobApplyForm) {
-    jobApplyForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const form = e.target;
-      const msgBox = form.querySelector('.form-msg');
-
-      if (!form.checkValidity()) {
-        form.classList.add('was-validated');
-        if (msgBox) {
-          msgBox.textContent = 'Please fill in all required fields correctly.';
-          msgBox.className = 'form-msg error';
+      const inputs = bookingForm.querySelectorAll('input, select, textarea');
+      const data = {};
+      
+      // Dynamic scanning logic safely maps medical fields based on custom target selectors
+      inputs.forEach(input => {
+        if (input.type === 'text' && input.placeholder.includes('official ID')) {
+          data.name = input.value.trim();
+        } else if (input.type === 'text' && input.placeholder.includes('blank if new')) {
+          data.patientId = input.value.trim() || 'NEW PATIENT';
+        } else if (input.tagName === 'SELECT') {
+          data.branch = input.options[input.selectedIndex].text;
+        } else if (input.type === 'text' && input.placeholder.includes('Cardiology')) {
+          data.doctor = input.value.trim();
+        } else if (input.type === 'tel') {
+          data.contact = input.value.trim();
+        } else if (input.type === 'date') {
+          data.date = input.value;
+        } else if (input.tagName === 'TEXTAREA') {
+          data.notes = input.value.trim() || 'None';
         }
-        return;
-      }
+      });
 
-      // Fetch career modal field values safely
-      const role = document.getElementById('modalRole')?.value || '-';
-      const name = document.getElementById('modalName')?.value.trim() || '-';
-      const phone = document.getElementById('modalPhone')?.value.trim() || '-';
-      const place = document.getElementById('modalPlace')?.value.trim() || '-';
-      const experience = document.getElementById('modalExperience')?.value || '-';
-      const available = document.getElementById('modalAvailable')?.value || '-';
-      const notes = document.getElementById('modalNote')?.value.trim() || 'None';
-
-      // Build text payload with clear typography
+      // Standard clean WhatsApp API bold formatting package
       const textMessage = [
-        `*New Job Application — Guru Multi Services*`,
+        `*🆕 CMC Medical Appointment Request*`,
         `━━━━━━━━━━━━━━━━━━━━━━`,
-        `💼 *Role:* ${role}`,
-        `👤 *Full Name:* ${name}`,
-        `📞 *Phone:* ${phone}`,
-        `📍 *Place / Area:* ${place}`,
-        `⏳ *Experience:* ${experience}`,
-        `📅 *Available From:* ${available}`,
-        `📝 *Notes:* ${notes}`
+        `👤 *Patient Name:* ${data.name || '-'}`,
+        `🆔 *CMC Patient ID:* ${data.patientId}`,
+        `🏥 *Hospital Branch:* ${data.branch || '-'}`,
+        `🩺 *Target Doctor / Dept:* ${data.doctor || '-'}`,
+        `📞 *Contact Number:* ${data.contact || '-'}`,
+        `📅 *Preferred Checkup Date:* ${data.date || '-'}`,
+        `📝 *Symptom/Issue Details:* ${data.notes || 'None'}`
       ].join('\n');
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
+      
+      bookingForm.reset();
+      bookingForm.classList.remove('was-validated');
+    });
+  }
 
-      if (msgBox) {
-        msgBox.textContent = "Opening WhatsApp — tap Send to submit your application!";
-        msgBox.className = 'form-msg success';
+  /* ---------------- 11. Core Secondary Form Handlers ---------------- */
+  function initializeSecondaryForm(formId, reportTitle) {
+    const targetForm = document.getElementById(formId);
+    if (!targetForm) return;
+
+    targetForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!targetForm.checkValidity()) {
+        targetForm.classList.add('was-validated');
+        return;
       }
 
-      form.reset();
-      form.classList.remove('was-validated');
+      const lines = [`*${reportTitle}*`, `━━━━━━━━━━━━━━━━━━━━━━`];
+      const items = targetForm.querySelectorAll('input, select, textarea');
+      
+      items.forEach((field) => {
+        if (!field.id && !field.name) return;
+        if (['submit', 'hidden', 'button'].includes(field.type)) return;
+        const value = field.value && field.value.trim() ? field.value.trim() : '-';
+        lines.push(`🔸 *${field.name || field.id}:* ${value}`);
+      });
 
-      // Dismiss bootstrap pop-up modal panel gracefully after redirection
-      setTimeout(() => {
-        const modalEl = document.getElementById('jobApplyModal');
-        if (modalEl) {
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          if (modal) modal.hide();
-        }
-      }, 2000);
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+      window.open(url, '_blank', 'noopener');
+      targetForm.reset();
+      targetForm.classList.remove('was-validated');
     });
   }
 
-  /* ---------------- Service detail scrollspy (service pages) ---------------- */
-  const spyLinks = document.querySelectorAll('.service-detail-nav .list-group-item');
-  if (spyLinks.length) {
-    const targets = Array.from(spyLinks).map(l => document.querySelector(l.getAttribute('href')));
-    window.addEventListener('scroll', () => {
-      let currentIdx = 0;
-      targets.forEach((t, i) => { if (t && window.scrollY >= t.offsetTop - 160) currentIdx = i; });
-      spyLinks.forEach(l => l.classList.remove('active'));
-      spyLinks[currentIdx].classList.add('active');
-    });
-  }
-
+  // Bind generalized utility streams safely
+  initializeSecondaryForm('contactForm', 'New General Inquiry');
 });
