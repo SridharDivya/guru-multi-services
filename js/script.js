@@ -2,12 +2,17 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Multi-Channel Modal Interceptor Application Gateway.
+             Main Multi-Service Booking Gateway, and Software 
+             Projects Service Booking Gateway.
+
+   Note: Job applications (careers.html) are now handled by a direct link
+   to our Google Form (which supports the Photo/ID file uploads) plus a
+   plain WhatsApp link — both are simple <a> tags in careers.html and need
+   no JavaScript here.
    ========================================================================== */
 
+// Your WhatsApp Business API number (International format, digits only)
 const WHATSAPP_NUMBER = '919441448690';
-const TARGET_EMAIL = 'gurumultiservices04@gmail.com';
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -16,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('load', function () {
     setTimeout(() => preloader && preloader.classList.add('loaded'), 300);
   });
+  // Fallback structural safety gate if load event hangs
   setTimeout(() => preloader && preloader.classList.add('loaded'), 2200);
 
   /* ---------------- 2. Global Document Helpers ---------------- */
@@ -34,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
   handleNavScroll();
   window.addEventListener('scroll', handleNavScroll);
 
+  // Auto-close responsive mobile nav dropdown on option select
   const navCollapseEl = document.getElementById('navMain');
   if (navCollapseEl) {
     document.querySelectorAll('#navMain .nav-link').forEach(link => {
@@ -71,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry, idx) => {
         if (entry.isIntersecting) {
+          // Staggered sequential parsing delay for cascading items
           setTimeout(() => entry.target.classList.add('in-view'), (idx % 4) * 80);
           revealObserver.unobserve(entry.target);
         }
@@ -78,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { threshold: 0.12 });
     revealEls.forEach(el => revealObserver.observe(el));
   } else {
+    // Graceful alternative for legacy layouts
     revealEls.forEach(el => el.classList.add('in-view'));
   }
 
@@ -122,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     question.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
+      // Collapses sibling nodes automatically for mutual exclusivity
       item.closest('.faq-list').querySelectorAll('.faq-item').forEach(other => {
         other.classList.remove('open');
         other.querySelector('.faq-answer').style.maxHeight = null;
@@ -177,13 +187,16 @@ document.addEventListener('DOMContentLoaded', function () {
   if (medicalForm) {
     medicalForm.addEventListener('submit', function (e) {
       e.preventDefault();
+
       if (!medicalForm.checkValidity()) {
         medicalForm.classList.add('was-validated');
         return;
       }
+
       const inputs = medicalForm.querySelectorAll('input, select, textarea');
       const data = {};
       
+      // Dynamic scanning logic safely maps medical fields based on custom target selectors
       inputs.forEach(input => {
         if (input.type === 'text' && input.placeholder.includes('official ID')) {
           data.name = input.value.trim();
@@ -202,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
 
+      // Standard clean WhatsApp API bold formatting package
       const textMessage = [
         `*🆕 CMC Medical Appointment Request*`,
         `━━━━━━━━━━━━━━━━━━━━━━`,
@@ -216,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
+      
       medicalForm.reset();
       medicalForm.classList.remove('was-validated');
     });
@@ -226,11 +241,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (mainBookingForm) {
     mainBookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
+
       if (!mainBookingForm.checkValidity()) {
         mainBookingForm.classList.add('was-validated');
         return;
       }
 
+      // Safeguard element selection
       const nameEl = document.getElementById('bkName');
       const phoneEl = document.getElementById('bkPhone');
       const serviceEl = document.getElementById('bkService');
@@ -247,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
         message: msgEl && msgEl.value.trim() ? msgEl.value.trim() : 'None provided'
       };
 
+      // Formatted WhatsApp structural template
       const textMessage = [
         `*🛠️ New Service Booking Request*`,
         `━━━━━━━━━━━━━━━━━━━━━━`,
@@ -260,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
+
       mainBookingForm.reset();
       mainBookingForm.classList.remove('was-validated');
     });
@@ -301,6 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Bind generalized utility streams safely
   initializeSecondaryForm('contactForm', 'New General Inquiry');
 
   /* ---------------- 13. Software Projects Booking Gateway ---------------- */
@@ -308,11 +328,13 @@ document.addEventListener('DOMContentLoaded', function () {
   if (projectsForm) {
     projectsForm.addEventListener('submit', function (e) {
       e.preventDefault();
+
       if (!projectsForm.checkValidity()) {
         projectsForm.classList.add('was-validated');
         return;
       }
 
+      // Safeguard element selection
       const nameEl = document.getElementById('projStudentName');
       const phoneEl = document.getElementById('projPhone');
       const emailEl = document.getElementById('projEmail');
@@ -331,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
         description: descEl && descEl.value.trim() ? descEl.value.trim() : 'None provided'
       };
 
+      // Formatted Whatsapp structural template for software development submissions
       const textMessage = [
         `*💻 Software Project Consultation Request*`,
         `━━━━━━━━━━━━━━━━━━━━━━`,
@@ -345,55 +368,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
+
       projectsForm.reset();
       projectsForm.classList.remove('was-validated');
-    });
-  }
-
-  /* ---------------- 14. Bulletproof Form & Multi-Channel Notification Router ---------------- */
-  const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
-  const overlay = document.getElementById('pipelineModalOverlay');
-  const actionBtn = document.getElementById('modalActionBtn');
-  
-  let selectedRole = 'General Tradesperson';
-
-  pipelineLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const formUrl = this.getAttribute('href');
-      selectedRole = this.getAttribute('data-role') || 'General Tradesperson';
-      
-      // 1. Instantly open Google Form safely (since it's inside a user-click handler)
-      window.open(formUrl, '_blank', 'noopener');
-      
-      // 2. Display our premium pipeline routing overlay on screen
-      if (overlay) {
-        overlay.classList.add('active');
-      }
-    });
-  });
-
-  if (actionBtn) {
-    actionBtn.addEventListener('click', function() {
-      // 1. Build messages
-      const wsText = `Hi, I am filling out the application form for the *${selectedRole}* position at Guru Multi Services and wanted to notify you!`;
-      const emailSubject = `Career Application Notification: ${selectedRole}`;
-      const emailBody = `Hello Guru Multi Services Team,\n\nThis is an automated notification tracking packet to confirm that I am filling out the application form for the position of ${selectedRole}.\n\nPlease find my details logged inside the main system repository.\n\nBest regards.`;
-
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
-      const emailUrl = `mailto:${TARGET_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
-      // 2. Safely popup the WhatsApp tab as a direct click result
-      window.open(whatsappUrl, '_blank', 'noopener');
-      
-      // 3. Immediately redirect main tab to load native Mail Client
-      window.location.href = emailUrl;
-
-      // 4. Hide overlay
-      if (overlay) {
-        overlay.classList.remove('active');
-      }
     });
   }
 
