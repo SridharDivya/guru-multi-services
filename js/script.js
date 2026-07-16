@@ -3,7 +3,7 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Multi-Channel Modal Interceptor Application Gateway.
+             and Direct WhatsApp Career Application Notification Pipeline.
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '919441448690';
@@ -350,51 +350,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Bulletproof Form & Multi-Channel Notification Router ---------------- */
+  /* ---------------- 14. Direct Multi-Channel Application & WhatsApp Notification Router ---------------- */
   const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
-  const overlay = document.getElementById('pipelineModalOverlay');
-  const actionBtn = document.getElementById('modalActionBtn');
-  
-  let selectedRole = 'General Tradesperson';
-
   pipelineLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
       
       const formUrl = this.getAttribute('href');
-      selectedRole = this.getAttribute('data-role') || 'General Tradesperson';
+      const targetRole = this.getAttribute('data-role') || 'General Tradesperson';
       
-      // 1. Instantly open Google Form safely (since it's inside a user-click handler)
-      window.open(formUrl, '_blank', 'noopener');
-      
-      // 2. Display our premium pipeline routing overlay on screen
-      if (overlay) {
-        overlay.classList.add('active');
-      }
+      // 1. Build customized WhatsApp notice packet
+      const wsText = `Hi! I am filling out the application form for the *${targetRole}* position at Guru Multi Services and wanted to notify you!`;
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
+
+      // 2. Safely launch BOTH windows simultaneously as a direct user-click result
+      window.open(formUrl, '_blank', 'noopener'); 
+      window.open(whatsappUrl, '_blank', 'noopener');
     });
   });
-
-  if (actionBtn) {
-    actionBtn.addEventListener('click', function() {
-      // 1. Build messages
-      const wsText = `Hi, I am filling out the application form for the *${selectedRole}* position at Guru Multi Services and wanted to notify you!`;
-      const emailSubject = `Career Application Notification: ${selectedRole}`;
-      const emailBody = `Hello Guru Multi Services Team,\n\nThis is an automated notification tracking packet to confirm that I am filling out the application form for the position of ${selectedRole}.\n\nPlease find my details logged inside the main system repository.\n\nBest regards.`;
-
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
-      const emailUrl = `mailto:${TARGET_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
-      // 2. Safely popup the WhatsApp tab as a direct click result
-      window.open(whatsappUrl, '_blank', 'noopener');
-      
-      // 3. Immediately redirect main tab to load native Mail Client
-      window.location.href = emailUrl;
-
-      // 4. Hide overlay
-      if (overlay) {
-        overlay.classList.remove('active');
-      }
-    });
-  }
 
 });
