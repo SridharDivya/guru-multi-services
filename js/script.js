@@ -3,7 +3,7 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Multi-Channel Application Interceptor Portal.
+             and Multi-Channel Modal Interceptor Application Gateway.
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '919441448690';
@@ -350,31 +350,51 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Integrated Form Execution + Notification Routing ---------------- */
+  /* ---------------- 14. Bulletproof Form & Multi-Channel Notification Router ---------------- */
   const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
+  const overlay = document.getElementById('pipelineModalOverlay');
+  const actionBtn = document.getElementById('modalActionBtn');
+  
+  let selectedRole = 'General Tradesperson';
+
   pipelineLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-      // 1. Intercept standard transition architecture
       e.preventDefault();
-      const fallbackFormUrl = this.getAttribute('href');
-      const targetRole = this.getAttribute('data-role') || 'General Tradesperson';
       
-      // 2. Build multi-channel data payload packets
-      const wsText = `Hi, I am filling out the application form for the *${targetRole}* position at Guru Multi Services and wanted to notify you!`;
-      const emailSubject = `Career Application Notification: ${targetRole}`;
-      const emailBody = `Hello Guru Multi Services Team,\n\nThis is an automated notification tracking packet to confirm that I am filling out the application form for the position of ${targetRole}.\n\nPlease find my details logged inside the main system repository.\n\nBest regards.`;
+      const formUrl = this.getAttribute('href');
+      selectedRole = this.getAttribute('data-role') || 'General Tradesperson';
+      
+      // 1. Instantly open Google Form safely (since it's inside a user-click handler)
+      window.open(formUrl, '_blank', 'noopener');
+      
+      // 2. Display our premium pipeline routing overlay on screen
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+    });
+  });
+
+  if (actionBtn) {
+    actionBtn.addEventListener('click', function() {
+      // 1. Build messages
+      const wsText = `Hi, I am filling out the application form for the *${selectedRole}* position at Guru Multi Services and wanted to notify you!`;
+      const emailSubject = `Career Application Notification: ${selectedRole}`;
+      const emailBody = `Hello Guru Multi Services Team,\n\nThis is an automated notification tracking packet to confirm that I am filling out the application form for the position of ${selectedRole}.\n\nPlease find my details logged inside the main system repository.\n\nBest regards.`;
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
       const emailUrl = `mailto:${TARGET_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
-      // 3. Chain application form window launch alongside fallback notifications
-      window.open(fallbackFormUrl, '_blank', 'noopener'); 
+      // 2. Safely popup the WhatsApp tab as a direct click result
       window.open(whatsappUrl, '_blank', 'noopener');
       
-      setTimeout(() => {
-        window.location.href = emailUrl;
-      }, 600);
+      // 3. Immediately redirect main tab to load native Mail Client
+      window.location.href = emailUrl;
+
+      // 4. Hide overlay
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
     });
-  });
+  }
 
 });
