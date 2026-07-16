@@ -3,7 +3,7 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Direct WhatsApp Career Application Notification Pipeline.
+             and Delay-Buffered WhatsApp Career Application Notification Pipeline.
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '919441448690';
@@ -350,22 +350,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Direct Multi-Channel Application & WhatsApp Notification Router ---------------- */
+  /* ---------------- 14. Bulletproof Asynchronous WhatsApp Notification Pipeline ---------------- */
   const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
   pipelineLinks.forEach(link => {
     link.addEventListener('click', function(e) {
+      // Prevent original anchor redirect behavior
       e.preventDefault();
       
       const formUrl = this.getAttribute('href');
       const targetRole = this.getAttribute('data-role') || 'General Tradesperson';
       
-      // 1. Build customized WhatsApp notice packet
+      // 1. Instantly open Google Form inside active click-thread (safe from pop-up block)
+      window.open(formUrl, '_blank', 'noopener');
+      
+      // 2. Format WhatsApp notification message
       const wsText = `Hi! I am filling out the application form for the *${targetRole}* position at Guru Multi Services and wanted to notify you!`;
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
 
-      // 2. Safely launch BOTH windows simultaneously as a direct user-click result
-      window.open(formUrl, '_blank', 'noopener'); 
-      window.open(whatsappUrl, '_blank', 'noopener');
+      // 3. Pause for exactly 150 milliseconds before triggering the second tab.
+      // This micro-delay allows Google Form to mount first and stops browser security from blocking WhatsApp.
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank', 'noopener');
+      }, 150);
     });
   });
 
