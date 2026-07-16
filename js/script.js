@@ -2,13 +2,13 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             Main Multi-Service Booking Gateway, and Software 
-             Projects Service Booking Gateway.
+             Main Multi-Service Booking Gateway, Software Projects Service
+             Booking Gateway, and the Careers Two-Step Apply Enforcement.
 
-   Note: Job applications (careers.html) are now handled by a direct link
-   to our Google Form (which supports the Photo/ID file uploads) plus a
-   plain WhatsApp link — both are simple <a> tags in careers.html and need
-   no JavaScript here.
+   Note: Job applications (careers.html) use the Google Form (which supports
+   the Photo/ID file uploads) for Step 1, then a WhatsApp confirmation for
+   Step 2. Step 2 stays locked/disabled until Step 1 has been clicked — see
+   section 14 below.
    ========================================================================== */
 
 // Your WhatsApp Business API number (International format, digits only)
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const suffix = el.getAttribute('data-suffix') || '';
     const duration = 1500;
     const startTimestamp = performance.now();
-    
+
     function step(now) {
       const progress = Math.min((now - startTimestamp) / duration, 1);
       const easeOutCubic = 1 - Math.pow(1 - progress, 3);
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const question = item.querySelector('.faq-question');
     const answer = item.querySelector('.faq-answer');
     if (!question || !answer) return;
-    
+
     question.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
       // Collapses sibling nodes automatically for mutual exclusivity
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
       let percentage = (x / rect.width) * 100;
       if (percentage < 0) percentage = 0;
       if (percentage > 100) percentage = 100;
-      
+
       handle.style.left = percentage + '%';
       beforeImg.style.width = percentage + '%';
     };
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const inputs = medicalForm.querySelectorAll('input, select, textarea');
       const data = {};
-      
+
       // Dynamic scanning logic safely maps medical fields based on custom target selectors
       inputs.forEach(input => {
         if (input.type === 'text' && input.placeholder.includes('official ID')) {
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
-      
+
       medicalForm.reset();
       medicalForm.classList.remove('was-validated');
     });
@@ -298,18 +298,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const lines = [`*${reportTitle}*`, `━━━━━━━━━━━━━━━━━━━━━━`];
       const items = targetForm.querySelectorAll('input, select, textarea');
-      
+
       items.forEach((field) => {
         if (!field.id && !field.name) return;
         if (['submit', 'hidden', 'button'].includes(field.type)) return;
-        
+
         let value = '-';
         if (field.tagName === 'SELECT') {
           value = field.options[field.selectedIndex].text;
         } else if (field.value && field.value.trim()) {
           value = field.value.trim();
         }
-        
+
         lines.push(`🔸 *${field.name || field.id}:* ${value}`);
       });
 
@@ -373,5 +373,61 @@ document.addEventListener('DOMContentLoaded', function () {
       projectsForm.classList.remove('was-validated');
     });
   }
+
+  /* ---------------- 14. Careers — Mandatory Two-Step Apply Flow ----------------
+     Step 1: candidate clicks "Apply Now" -> Google Form opens in a new tab.
+     Step 2: the matching "Notify on WhatsApp" button (same data-role) is
+     locked/disabled until Step 1 has been clicked, then it lights up and
+     becomes clickable, pre-filled with a role-specific message. State is
+     saved to localStorage per role, so if the visitor closes the form tab
+     and comes back to careers.html later, Step 2 is still unlocked for
+     the role(s) they already started.
+     NOTE: A static site cannot detect an actual Google Form *submission*
+     (it's a different origin) — this enforces the click sequence in the
+     UI so every applicant is guided to also confirm on WhatsApp.
+  ------------------------------------------------------------------------ */
+  const applyButtons = document.querySelectorAll('.apply-btn[data-role]');
+  const STORAGE_PREFIX = 'guru_applied_';
+
+  function buildWhatsAppLink(role) {
+    const message = `Hi, I've just submitted my application for the ${role} position at Guru Multi Services via the form. Please confirm you've received it.`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  }
+
+  function unlockWhatsappStep(role, { pulse = false } = {}) {
+    const waBtn = document.querySelector(`.whatsapp-btn[data-role="${CSS.escape(role)}"]`);
+    if (!waBtn) return;
+
+    waBtn.classList.remove('disabled-step');
+    waBtn.removeAttribute('aria-disabled');
+    waBtn.setAttribute('href', buildWhatsAppLink(role));
+    waBtn.setAttribute('target', '_blank');
+    waBtn.setAttribute('rel', 'noopener');
+    waBtn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp';
+
+    if (pulse) {
+      waBtn.classList.add('step-ready');
+      waBtn.addEventListener('animationend', () => waBtn.classList.remove('step-ready'), { once: true });
+    }
+  }
+
+  // Restore already-unlocked steps on page load (e.g. user came back later)
+  applyButtons.forEach(btn => {
+    const role = btn.dataset.role;
+    if (role && localStorage.getItem(STORAGE_PREFIX + role) === '1') {
+      unlockWhatsappStep(role);
+    }
+  });
+
+  // Unlock Step 2 the moment Step 1 (Apply Now) is clicked
+  applyButtons.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const role = btn.dataset.role;
+      if (!role) return;
+      localStorage.setItem(STORAGE_PREFIX + role, '1');
+      // small delay so it feels like a deliberate "next step", not a swap mid-click
+      setTimeout(() => unlockWhatsappStep(role, { pulse: true }), 600);
+    });
+  });
 
 });
