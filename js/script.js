@@ -3,7 +3,7 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Delay-Buffered WhatsApp Career Application Notification Pipeline.
+             and Clean Application Portal Router.
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '919441448690';
@@ -350,28 +350,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Bulletproof Asynchronous WhatsApp Notification Pipeline ---------------- */
+  /* ---------------- 14. Career Application Portal Router ---------------- */
   const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
   pipelineLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-      // Prevent original anchor redirect behavior
-      e.preventDefault();
-      
+      // Directs the applicant cleanly into the Google Form in a new browser window.
+      // Redirection logic to WhatsApp is strictly handled inside the form confirmation step.
       const formUrl = this.getAttribute('href');
-      const targetRole = this.getAttribute('data-role') || 'General Tradesperson';
-      
-      // 1. Instantly open Google Form inside active click-thread (safe from pop-up block)
-      window.open(formUrl, '_blank', 'noopener');
-      
-      // 2. Format WhatsApp notification message
-      const wsText = `Hi! I am filling out the application form for the *${targetRole}* position at Guru Multi Services and wanted to notify you!`;
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
-
-      // 3. Pause for exactly 150 milliseconds before triggering the second tab.
-      // This micro-delay allows Google Form to mount first and stops browser security from blocking WhatsApp.
-      setTimeout(() => {
-        window.open(whatsappUrl, '_blank', 'noopener');
-      }, 150);
+      if (formUrl) {
+        window.open(formUrl, '_blank', 'noopener');
+        e.preventDefault(); 
+      }
     });
   });
 
