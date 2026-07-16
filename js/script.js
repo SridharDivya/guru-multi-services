@@ -5,10 +5,11 @@
              Main Multi-Service Booking Gateway, Software Projects Service
              Booking Gateway, and the Careers Two-Step Apply Enforcement.
 
-   Note: Job applications (careers.html) use the Google Form (which supports
-   the Photo/ID file uploads) for Step 1, then a WhatsApp confirmation for
-   Step 2. Step 2 stays locked/disabled until Step 1 has been clicked — see
-   section 14 below.
+   Note: Job applications (careers.html) open the Google Form (which
+   supports the Photo/ID file uploads) inside a modal on our own page. We
+   detect a successful submission by watching the embedded form's iframe
+   reload itself to Google's "response recorded" screen, then immediately
+   prompt the applicant to confirm via WhatsApp — see section 14 below.
    ========================================================================== */
 
 // Your WhatsApp Business API number (International format, digits only)
@@ -374,60 +375,115 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Careers — Mandatory Two-Step Apply Flow ----------------
-     Step 1: candidate clicks "Apply Now" -> Google Form opens in a new tab.
-     Step 2: the matching "Notify on WhatsApp" button (same data-role) is
-     locked/disabled until Step 1 has been clicked, then it lights up and
-     becomes clickable, pre-filled with a role-specific message. State is
-     saved to localStorage per role, so if the visitor closes the form tab
-     and comes back to careers.html later, Step 2 is still unlocked for
-     the role(s) they already started.
-     NOTE: A static site cannot detect an actual Google Form *submission*
-     (it's a different origin) — this enforces the click sequence in the
-     UI so every applicant is guided to also confirm on WhatsApp.
+  /* ---------------- 14. Careers — Embedded Apply Form + Auto WhatsApp Prompt ----------------
+     The Google Form is embedded in a modal instead of opening in a new tab.
+     We can't read the iframe's contents or URL (it's a different origin —
+     docs.google.com), but we CAN watch the iframe's `load` event, which
+     fires once for the initial empty form and fires AGAIN the moment
+     Google navigates it to the "your response has been recorded" page
+     after a successful submit. That second load is our submission signal.
+
+     The instant it fires, we swap the modal to a "Confirm on WhatsApp"
+     panel with a big, pulsing WhatsApp button pre-filled with a
+     role-specific message, and we also try to auto-open WhatsApp for the
+     visitor. Browsers only allow window.open() to bypass the popup
+     blocker when it runs inside a real, direct user gesture (a click) —
+     our trigger is an iframe load event, so most browsers will still
+     block the automatic pop-up. That's exactly why the big WhatsApp
+     button is there: it's one tap away the moment submission is detected,
+     which is as close to an automatic redirect as a static site (no
+     backend/WhatsApp Business API) can safely get.
   ------------------------------------------------------------------------ */
-  const applyButtons = document.querySelectorAll('.apply-btn[data-role]');
-  const STORAGE_PREFIX = 'guru_applied_';
+  const GOOGLE_FORM_BASE = 'https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform';
 
-  function buildWhatsAppLink(role) {
-    const message = `Hi, I've just submitted my application for the ${role} position at Guru Multi Services via the form. Please confirm you've received it.`;
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  }
+  const applyModalEl   = document.getElementById('applyModal');
+  const applyFormFrame = document.getElementById('applyFormFrame');
+  const applyFormWrap  = document.getElementById('applyFormWrap');
+  const applyLoading   = document.getElementById('applyFormLoading');
+  const applyThanksWrap= document.getElementById('applyThanksWrap');
+  const applyWaLink    = document.getElementById('applyWhatsappLink');
+  const applyDirectLink= document.getElementById('applyDirectLink');
+  const applyModalRole = document.getElementById('applyModalRole');
 
-  function unlockWhatsappStep(role, { pulse = false } = {}) {
-    const waBtn = document.querySelector(`.whatsapp-btn[data-role="${CSS.escape(role)}"]`);
-    if (!waBtn) return;
+  if (applyModalEl && applyFormFrame && window.bootstrap) {
 
-    waBtn.classList.remove('disabled-step');
-    waBtn.removeAttribute('aria-disabled');
-    waBtn.setAttribute('href', buildWhatsAppLink(role));
-    waBtn.setAttribute('target', '_blank');
-    waBtn.setAttribute('rel', 'noopener');
-    waBtn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp';
+    let currentRole   = 'General';
+    let frameLoadCount = 0;
+    let bsModal = null;
 
-    if (pulse) {
-      waBtn.classList.add('step-ready');
-      waBtn.addEventListener('animationend', () => waBtn.classList.remove('step-ready'), { once: true });
+    function buildWhatsAppLink(role) {
+      const message = `Hi, I've just submitted my application for the ${role} position at Guru Multi Services via the form. Please confirm you've received it.`;
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     }
-  }
 
-  // Restore already-unlocked steps on page load (e.g. user came back later)
-  applyButtons.forEach(btn => {
-    const role = btn.dataset.role;
-    if (role && localStorage.getItem(STORAGE_PREFIX + role) === '1') {
-      unlockWhatsappStep(role);
+    function resetModalToFormView() {
+      applyThanksWrap.classList.add('d-none');
+      applyFormWrap.style.display = '';
+      applyLoading.style.display = 'flex';
     }
-  });
 
-  // Unlock Step 2 the moment Step 1 (Apply Now) is clicked
-  applyButtons.forEach(btn => {
-    btn.addEventListener('click', function () {
-      const role = btn.dataset.role;
-      if (!role) return;
-      localStorage.setItem(STORAGE_PREFIX + role, '1');
-      // small delay so it feels like a deliberate "next step", not a swap mid-click
-      setTimeout(() => unlockWhatsappStep(role, { pulse: true }), 600);
+    function showThanksPanel(role) {
+      const waLink = buildWhatsAppLink(role);
+
+      applyFormWrap.style.display = 'none';
+      applyThanksWrap.classList.remove('d-none');
+
+      applyWaLink.setAttribute('href', waLink);
+
+      // Best-effort auto-open. Works on some mobile browsers; desktop
+      // browsers will usually block it since this isn't a direct click —
+      // the visible button above is the reliable fallback either way.
+      try {
+        const popup = window.open(waLink, '_blank', 'noopener');
+        if (!popup) { /* blocked — the button in the panel still works */ }
+      } catch (err) { /* ignore — button in the panel still works */ }
+
+      // Also unlock the small per-card "Notify on WhatsApp" button, in
+      // case the visitor closes this modal and looks for it on the card.
+      const cardWaBtn = document.querySelector(`.whatsapp-btn[data-role="${CSS.escape(role)}"]`);
+      if (cardWaBtn) {
+        cardWaBtn.classList.remove('disabled-step');
+        cardWaBtn.removeAttribute('aria-disabled');
+        cardWaBtn.setAttribute('href', waLink);
+        cardWaBtn.setAttribute('target', '_blank');
+        cardWaBtn.setAttribute('rel', 'noopener');
+        cardWaBtn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp';
+        cardWaBtn.classList.add('step-ready');
+      }
+      localStorage.setItem('guru_applied_' + role, '1');
+    }
+
+    applyFormFrame.addEventListener('load', function () {
+      frameLoadCount += 1;
+      applyLoading.style.display = 'none';
+
+      // 1st load = the blank form itself finishing load. Ignore it.
+      if (frameLoadCount < 2) return;
+
+      // 2nd+ load = Google navigated the iframe after a successful submit.
+      showThanksPanel(currentRole);
     });
-  });
+
+    // Every "Apply Now" button (job cards + the catch-all) opens the modal
+    document.querySelectorAll('.apply-btn[data-role]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        currentRole = btn.dataset.role || 'General';
+        frameLoadCount = 0;
+
+        applyModalRole.textContent = currentRole;
+        applyDirectLink.setAttribute('href', GOOGLE_FORM_BASE + '?usp=header');
+        resetModalToFormView();
+        applyFormFrame.src = GOOGLE_FORM_BASE + '?embedded=true';
+      });
+    });
+
+    // Stop the form/iframe once the modal is closed, so re-opening it
+    // always starts from a clean, empty form.
+    applyModalEl.addEventListener('hidden.bs.modal', function () {
+      applyFormFrame.src = 'about:blank';
+      frameLoadCount = 0;
+      resetModalToFormView();
+    });
+  }
 
 });
