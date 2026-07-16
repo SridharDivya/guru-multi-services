@@ -3,7 +3,7 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Clean Application Portal Router.
+             and Automated Career Portal WhatsApp Router.
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '919441448690';
@@ -350,18 +350,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Career Application Portal Router ---------------- */
-  const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
-  pipelineLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      // Directs the applicant cleanly into the Google Form in a new browser window.
-      // Redirection logic to WhatsApp is strictly handled inside the form confirmation step.
-      const formUrl = this.getAttribute('href');
-      if (formUrl) {
-        window.open(formUrl, '_blank', 'noopener');
-        e.preventDefault(); 
+  /* ---------------- 14. Career Application Portal Gateway ---------------- */
+  const careerForm = document.getElementById('careerForm');
+  if (careerForm) {
+    careerForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!careerForm.checkValidity()) {
+        careerForm.classList.add('was-validated');
+        return;
       }
+
+      const nameEl = document.getElementById('appName');
+      const phoneEl = document.getElementById('appPhone');
+      const emailEl = document.getElementById('appEmail');
+      const positionEl = document.getElementById('appPosition');
+      const expEl = document.getElementById('appExperience');
+      const detailsEl = document.getElementById('appDetails');
+
+      const data = {
+        name: nameEl ? nameEl.value.trim() : '-',
+        phone: phoneEl ? phoneEl.value.trim() : '-',
+        email: emailEl ? emailEl.value.trim() : '-',
+        position: positionEl ? positionEl.options[positionEl.selectedIndex].text : '-',
+        experience: expEl ? expEl.value.trim() : '-',
+        details: detailsEl && detailsEl.value.trim() ? detailsEl.value.trim() : 'None provided'
+      };
+
+      const textMessage = [
+        `*💼 New Job Application Submitted*`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `👤 *Applicant Name:* ${data.name}`,
+        `📞 *Contact Phone:* ${data.phone}`,
+        `📧 *Email Address:* ${data.email}`,
+        `🎯 *Target Position:* ${data.position}`,
+        `⏳ *Experience Details:* ${data.experience}`,
+        `💬 *Additional Cover Notes:* ${data.details}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener');
+      careerForm.reset();
+      careerForm.classList.remove('was-validated');
     });
-  });
+  }
 
 });
