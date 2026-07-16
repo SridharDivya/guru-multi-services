@@ -3,10 +3,9 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Multi-Channel (WhatsApp + Email) Application Gateway.
+             and Multi-Channel Application Interceptor Portal.
    ========================================================================== */
 
-// Global configuration variables
 const WHATSAPP_NUMBER = '919441448690';
 const TARGET_EMAIL = 'gurumultiservices04@gmail.com';
 
@@ -351,26 +350,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Dual WhatsApp & Email Careers System ---------------- */
-  const applyButtons = document.querySelectorAll('.btn-apply-action');
-  applyButtons.forEach(button => {
-    button.addEventListener('click', function() {
+  /* ---------------- 14. Integrated Form Execution + Notification Routing ---------------- */
+  const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
+  pipelineLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      // 1. Intercept standard transition architecture
+      e.preventDefault();
+      const fallbackFormUrl = this.getAttribute('href');
       const targetRole = this.getAttribute('data-role') || 'General Tradesperson';
       
-      // 1. Structure message content
-      const wsText = `Hi, I'm interested in applying for the *${targetRole}* role at Guru Multi Services. Please share the details!`;
-      const emailSubject = `Application and Career Enquiry - ${targetRole}`;
-      const emailBody = `Hello Guru Multi Services Team,\n\nI am writing to officially submit my application and query for the open position of ${targetRole}.\n\nPlease let me know the details and subsequent evaluation guidelines.\n\nBest regards,`;
+      // 2. Build multi-channel data payload packets
+      const wsText = `Hi, I am filling out the application form for the *${targetRole}* position at Guru Multi Services and wanted to notify you!`;
+      const emailSubject = `Career Application Notification: ${targetRole}`;
+      const emailBody = `Hello Guru Multi Services Team,\n\nThis is an automated notification tracking packet to confirm that I am filling out the application form for the position of ${targetRole}.\n\nPlease find my details logged inside the main system repository.\n\nBest regards.`;
 
-      // 2. Generate target links
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
       const emailUrl = `mailto:${TARGET_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
-      // 3. Dual firing window mechanism
+      // 3. Chain application form window launch alongside fallback notifications
+      window.open(fallbackFormUrl, '_blank', 'noopener'); 
       window.open(whatsappUrl, '_blank', 'noopener');
+      
       setTimeout(() => {
         window.location.href = emailUrl;
-      }, 400);
+      }, 600);
     });
   });
 
