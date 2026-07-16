@@ -40,11 +40,11 @@
 <!-- ================= Navbar ================= -->
 <nav class="navbar navbar-expand-lg navbar-guru" id="mainNavbar">
   <div class="container">
-  <a class="navbar-brand d-flex align-items-center" href="index.html">
-    <img src="images/guru-company-logo.png" alt="Guru Multi Services Logo" 
-    style="width:55px; height:55px; margin-right:10px; border-radius:8px;">
-    <span>GURU<span>.</span>MULTI SERVICES</span>
- </a>
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="images/guru-company-logo.png" alt="Guru Multi Services Logo" 
+      style="width:55px; height:55px; margin-right:10px; border-radius:8px;">
+      <span>GURU<span>.</span>MULTI SERVICES</span>
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fa-solid fa-bars"></i>
     </button>
@@ -52,7 +52,26 @@
       <ul class="navbar-nav align-items-lg-center">
         <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        
+        <!-- Updated Services Dropdown Link -->
+        <li class="nav-item dropdown guru-dropdown">
+          <a class="nav-link dropdown-toggle" href="#services" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Services
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+            <li><a class="dropdown-item" href="services/plywood.html">Plywood & Timber</a></li>
+            <li><a class="dropdown-item" href="services/shifting.html">House Shifting</a></li>
+            <li><a class="dropdown-item" href="services/repairs.html">Home Repairs</a></li>
+            <li><a class="dropdown-item" href="services/geyser.html">Geyser Installation & Repairs</a></li>
+            <li><a class="dropdown-item" href="services/cmc-assist.html">CMC Appointment Assistance</a></li>
+            <li><a class="dropdown-item" href="services/projects.html">Software Projects</a></li>
+            <li><a class="dropdown-item" href="services/carpentry.html">Carpentry & Wood Design</a></li>
+            <li><a class="dropdown-item" href="services/steel.html">Steel & Balcony Grill Works</a></li>
+            <li><a class="dropdown-item" href="services/taxi.html">Car & Taxi Booking</a></li>
+            <li><a class="dropdown-item" href="services/billing.html">Online Billing</a></li>
+          </ul>
+        </li>
+
         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         <li class="nav-item"><a class="nav-link" href="careers.html">Careers</a></li>
         <li class="nav-item ms-lg-3 mt-2 mt-lg-0"><a class="btn-nav-cta" href="https://wa.me/919441448690" target="_blank" rel="noopener">Book a Service</a></li>
@@ -60,7 +79,6 @@
     </div>
   </div>
 </nav>
-
 <!-- ================= Hero ================= -->
 <header class="hero" id="home">
   <div class="hero-media">
