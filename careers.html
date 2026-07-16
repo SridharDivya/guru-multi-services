@@ -35,6 +35,28 @@
     0%,100%{ box-shadow:0 0 0 0 rgba(37,211,102,.45); }
     50%{ box-shadow:0 0 0 8px rgba(37,211,102,0); }
   }
+
+  /* --- Apply modal: embedded form + auto WhatsApp prompt after submit --- */
+  #applyFormFrame{
+    width:100%;
+    height:72vh;
+    min-height:420px;
+    border:0;
+    display:block;
+    background:#fff;
+  }
+  #applyFormLoading{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+  }
+  #applyThanksWrap i.fa-circle-check{ color:#25D366; }
+  #applyThanksWrap .btn-gold{
+    animation:guruPulse 1.4s ease-in-out 3;
+  }
 </style>
 </head>
 <body>
@@ -97,11 +119,12 @@
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
 
             <span class="step-label">Step 1 of 2</span>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform?usp=header" target="_blank" rel="noopener"
+            <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
-               data-role="Plumber">
+               data-role="Plumber"
+               data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
-            </a>
+            </button>
 
             <span class="step-label">Step 2 of 2 &mdash; required</span>
             <a href="#" aria-disabled="true"
@@ -127,11 +150,12 @@
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
 
             <span class="step-label">Step 1 of 2</span>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform?usp=header" target="_blank" rel="noopener"
+            <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
-               data-role="Electrician">
+               data-role="Electrician"
+               data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
-            </a>
+            </button>
 
             <span class="step-label">Step 2 of 2 &mdash; required</span>
             <a href="#" aria-disabled="true"
@@ -157,11 +181,12 @@
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time / Part-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
 
             <span class="step-label">Step 1 of 2</span>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform?usp=header" target="_blank" rel="noopener"
+            <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
-               data-role="Painter">
+               data-role="Painter"
+               data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
-            </a>
+            </button>
 
             <span class="step-label">Step 2 of 2 &mdash; required</span>
             <a href="#" aria-disabled="true"
@@ -187,11 +212,12 @@
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
 
             <span class="step-label">Step 1 of 2</span>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform?usp=header" target="_blank" rel="noopener"
+            <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
-               data-role="Driver">
+               data-role="Driver"
+               data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
-            </a>
+            </button>
 
             <span class="step-label">Step 2 of 2 &mdash; required</span>
             <a href="#" aria-disabled="true"
@@ -217,11 +243,12 @@
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
 
             <span class="step-label">Step 1 of 2</span>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform?usp=header" target="_blank" rel="noopener"
+            <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
-               data-role="Carpenter">
+               data-role="Carpenter"
+               data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
-            </a>
+            </button>
 
             <span class="step-label">Step 2 of 2 &mdash; required</span>
             <a href="#" aria-disabled="true"
@@ -237,7 +264,7 @@
     </div>
 
     <div class="text-center mt-4">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg514UjkJ7zCLPKsIxcTGlSuNEa74yPGEe80tDsvAA6MoF2g/viewform?usp=header" target="_blank" rel="noopener" class="btn-outline-wood apply-btn" data-role="Other Trade"><i class="fa-solid fa-user-plus"></i> Don't see your trade? Apply anyway</a>
+      <button type="button" class="btn-outline-wood apply-btn" data-role="Other Trade" data-bs-toggle="modal" data-bs-target="#applyModal"><i class="fa-solid fa-user-plus"></i> Don't see your trade? Apply anyway</button>
     </div>
 
     <div class="mt-5">
@@ -257,7 +284,7 @@
     <div class="row booking-panel g-0 reveal">
       <div class="col-lg-5 booking-info">
         <h3>Ready To Apply?</h3>
-        <p>Click "Apply Now" for any role above to fill out our application form (including photo and ID upload) — it goes straight to our hiring team by email. The WhatsApp confirmation button unlocks right after, and completing it is required so we know to expect your application.</p>
+        <p>Click "Apply Now" for any role above to fill out our application form (including photo and ID upload) right here on the page. As soon as you submit it, we'll prompt you to confirm on WhatsApp too — that step only takes one tap, and it's how we know to expect your application.</p>
         <div class="contact-line"><i class="fa-solid fa-phone"></i> +91 9441448690</div>
         <div class="contact-line"><i class="fa-solid fa-envelope"></i> gurumultiservices04@gmail.com</div>
         <div class="contact-line"><i class="fa-solid fa-clock"></i> Mon–Sat, 9:00 AM – 7:00 PM</div>
@@ -265,7 +292,7 @@
       <div class="col-lg-7 booking-form-wrap d-flex align-items-center justify-content-center text-center">
         <div>
           <i class="fa-solid fa-clipboard-list fa-2x mb-3" style="color:var(--gold)"></i>
-          <p style="color:var(--text-muted); max-width:380px;">Applications are collected through our secure Google Form — pick a role above, click "Apply Now", then confirm on WhatsApp to complete your application.</p>
+          <p style="color:var(--text-muted); max-width:380px;">Applications are collected through our secure Google Form — pick a role above and click "Apply Now" to open it right in this page. Right after you submit, you'll be prompted to confirm on WhatsApp.</p>
         </div>
       </div>
     </div>
@@ -322,6 +349,41 @@
 
 <a href="https://wa.me/919441448690" target="_blank" rel="noopener" class="float-btn" id="whatsappBtn" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
 <button class="float-btn" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- Apply Modal: embeds the Google Form, then auto-prompts WhatsApp confirmation
+     once a submission is detected (see script.js section 14). -->
+<div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="applyModalLabel">Apply — <span id="applyModalRole">Job</span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+
+        <div id="applyFormWrap" style="position:relative;">
+          <div id="applyFormLoading">
+            <div class="spinner-border" role="status" style="color:var(--gold, #c9a24b)"><span class="visually-hidden">Loading…</span></div>
+          </div>
+          <iframe id="applyFormFrame" src="about:blank" title="Application form" loading="eager"></iframe>
+        </div>
+
+        <div id="applyThanksWrap" class="d-none text-center p-5">
+          <i class="fa-solid fa-circle-check fa-3x mb-3"></i>
+          <h4>Application received!</h4>
+          <p style="color:var(--text-muted)">One last step — confirm on WhatsApp so our hiring team knows to expect your application.</p>
+          <a href="#" id="applyWhatsappLink" target="_blank" rel="noopener" class="btn-gold justify-content-center d-inline-flex">
+            <i class="fa-brands fa-whatsapp"></i> Confirm on WhatsApp
+          </a>
+        </div>
+
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a href="#" id="applyDirectLink" target="_blank" rel="noopener" style="font-size:0.85rem; color:var(--text-muted)">Trouble with the form above? Open it in a new tab instead</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/script.js"></script>
