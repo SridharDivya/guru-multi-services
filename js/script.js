@@ -3,7 +3,7 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Booking,
-             and Automated Career Portal WhatsApp Router.
+             and Multi-Channel Modal Interceptor Application Gateway.
    ========================================================================== */
 
 const WHATSAPP_NUMBER = '919441448690';
@@ -350,60 +350,51 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 14. Career Application Portal Gateway ---------------- */
-  /* ---------------- 14. Career Application Portal Gateway ---------------- */
-  const careerForm = document.getElementById('careerForm');
-  if (careerForm) {
-    careerForm.addEventListener('submit', function (e) {
+  /* ---------------- 14. Bulletproof Form & Multi-Channel Notification Router ---------------- */
+  const pipelineLinks = document.querySelectorAll('.btn-apply-pipeline');
+  const overlay = document.getElementById('pipelineModalOverlay');
+  const actionBtn = document.getElementById('modalActionBtn');
+  
+  let selectedRole = 'General Tradesperson';
+
+  pipelineLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
       e.preventDefault();
-      if (!careerForm.checkValidity()) {
-        careerForm.classList.add('was-validated');
-        return;
-      }
-
-      const nameEl = document.getElementById('appName');
-      const phoneEl = document.getElementById('appPhone');
-      const emailEl = document.getElementById('appEmail');
-      const positionEl = document.getElementById('appPosition');
-      const expEl = document.getElementById('appExperience');
-      const detailsEl = document.getElementById('appDetails');
-
-      const data = {
-        name: nameEl ? nameEl.value.trim() : '-',
-        phone: phoneEl ? phoneEl.value.trim() : '-',
-        email: emailEl ? emailEl.value.trim() : '-',
-        position: positionEl ? positionEl.options[positionEl.selectedIndex].text : '-',
-        experience: expEl ? expEl.value.trim() : '-',
-        details: detailsEl && detailsEl.value.trim() ? detailsEl.value.trim() : 'None provided'
-      };
-
-      const textMessage = [
-        `*💼 New Job Application Submitted*`,
-        `━━━━━━━━━━━━━━━━━━━━━━`,
-        `👤 *Applicant Name:* ${data.name}`,
-        `📞 *Contact Phone:* ${data.phone}`,
-        `📧 *Email Address:* ${data.email}`,
-        `🎯 *Target Position:* ${data.position}`,
-        `⏳ *Experience Details:* ${data.experience}`,
-        `💬 *Additional Cover Notes:* ${data.details}`
-      ].join('\n');
-
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       
-      // 1. Force close the Bootstrap modal frame so it doesn't intercept or hang the window focus
-      const modalEl = document.getElementById('careerModal');
-      if (modalEl && typeof bootstrap !== 'undefined') {
-        const modalInstance = bootstrap.Modal.getInstance(modalEl);
-        if (modalInstance) {
-          modalInstance.hide();
-        }
+      const formUrl = this.getAttribute('href');
+      selectedRole = this.getAttribute('data-role') || 'General Tradesperson';
+      
+      // 1. Instantly open Google Form safely (since it's inside a user-click handler)
+      window.open(formUrl, '_blank', 'noopener');
+      
+      // 2. Display our premium pipeline routing overlay on screen
+      if (overlay) {
+        overlay.classList.add('active');
       }
+    });
+  });
 
-      // 2. Clear out validation styles and reset the input fields cleanly
-      careerForm.reset();
-      careerForm.classList.remove('was-validated');
+  if (actionBtn) {
+    actionBtn.addEventListener('click', function() {
+      // 1. Build messages
+      const wsText = `Hi, I am filling out the application form for the *${selectedRole}* position at Guru Multi Services and wanted to notify you!`;
+      const emailSubject = `Career Application Notification: ${selectedRole}`;
+      const emailBody = `Hello Guru Multi Services Team,\n\nThis is an automated notification tracking packet to confirm that I am filling out the application form for the position of ${selectedRole}.\n\nPlease find my details logged inside the main system repository.\n\nBest regards.`;
 
-      // 3. Directly open the WhatsApp portal interface
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(wsText)}`;
+      const emailUrl = `mailto:${TARGET_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+      // 2. Safely popup the WhatsApp tab as a direct click result
       window.open(whatsappUrl, '_blank', 'noopener');
+      
+      // 3. Immediately redirect main tab to load native Mail Client
+      window.location.href = emailUrl;
+
+      // 4. Hide overlay
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
     });
   }
+
+});
