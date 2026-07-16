@@ -351,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ---------------- 14. Career Application Portal Gateway ---------------- */
+  /* ---------------- 14. Career Application Portal Gateway ---------------- */
   const careerForm = document.getElementById('careerForm');
   if (careerForm) {
     careerForm.addEventListener('submit', function (e) {
@@ -388,10 +389,21 @@ document.addEventListener('DOMContentLoaded', function () {
       ].join('\n');
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
-      window.open(whatsappUrl, '_blank', 'noopener');
+      
+      // 1. Force close the Bootstrap modal frame so it doesn't intercept or hang the window focus
+      const modalEl = document.getElementById('careerModal');
+      if (modalEl && typeof bootstrap !== 'undefined') {
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        if (modalInstance) {
+          modalInstance.hide();
+        }
+      }
+
+      // 2. Clear out validation styles and reset the input fields cleanly
       careerForm.reset();
       careerForm.classList.remove('was-validated');
+
+      // 3. Directly open the WhatsApp portal interface
+      window.open(whatsappUrl, '_blank', 'noopener');
     });
   }
-
-});
