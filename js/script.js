@@ -2,8 +2,9 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             Specialized Geyser Service Booking Gateway, and Software 
-             Projects Service Booking Gateway.
+             Specialized Geyser Service Booking Gateway, Software Projects 
+             Service Booking Gateway, and Core Multi-Service Booking Form 
+             Gateway with WhatsApp API support.
 
    Note: Job applications (careers.html) are now handled by a direct link
    to our Google Form (which supports the Photo/ID file uploads) plus a
@@ -237,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ---------------- 11. Geyser Service Booking Gateway ---------------- */
-  const geyserForm = document.getElementById('bookingForm');
+  const geyserForm = document.getElementById('bookingFormGeyser'); // Renamed identifier to prevent collision with primary index form
   if (geyserForm) {
     geyserForm.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -368,6 +369,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
       projectsForm.reset();
       projectsForm.classList.remove('was-validated');
+    });
+  }
+
+  /* ---------------- 14. Primary Index Booking Form Gateway ---------------- */
+  const primaryBookingForm = document.getElementById('bookingForm');
+  if (primaryBookingForm) {
+    primaryBookingForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!primaryBookingForm.checkValidity()) {
+        primaryBookingForm.classList.add('was-validated');
+        return;
+      }
+
+      // Safe DOM querying
+      const nameEl = document.getElementById('bkName');
+      const phoneEl = document.getElementById('bkPhone');
+      const serviceEl = document.getElementById('bkService');
+      const dateEl = document.getElementById('bkDate');
+      const addressEl = document.getElementById('bkAddress');
+      const msgEl = document.getElementById('bkMessage');
+
+      const data = {
+        name: nameEl ? nameEl.value.trim() : '-',
+        phone: phoneEl ? phoneEl.value.trim() : '-',
+        service: serviceEl ? serviceEl.options[serviceEl.selectedIndex].text : '-',
+        date: dateEl ? dateEl.value : '-',
+        address: addressEl ? addressEl.value.trim() : '-',
+        message: msgEl && msgEl.value.trim() ? msgEl.value.trim() : 'None provided'
+      };
+
+      // Construct beautifully formatted message templates for WhatsApp API execution
+      const textMessage = [
+        `*📅 New Booking Request — Guru Multi Services*`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
+        `👤 *Customer Name:* ${data.name}`,
+        `📞 *Phone Number:* ${data.phone}`,
+        `🛠️ *Service Selected:* ${data.service}`,
+        `📅 *Preferred Date:* ${data.date}`,
+        `📍 *Service Address:* ${data.address}`,
+        `💬 *Client Notes:* ${data.message}`
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener');
+
+      primaryBookingForm.reset();
+      primaryBookingForm.classList.remove('was-validated');
     });
   }
 
