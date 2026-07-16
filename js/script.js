@@ -2,9 +2,8 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             Specialized Geyser Service Booking Gateway, Software Projects 
-             Service Booking Gateway, and Core Multi-Service Booking Form 
-             Gateway with WhatsApp API support.
+             Main Multi-Service Booking Gateway, and Software 
+             Projects Service Booking Gateway.
 
    Note: Job applications (careers.html) are now handled by a direct link
    to our Google Form (which supports the Photo/ID file uploads) plus a
@@ -184,17 +183,17 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   /* ---------------- 10. CMC Medical Appointment Form Gateway ---------------- */
-  const bookingForm = document.querySelector('#booking-form form');
-  if (bookingForm) {
-    bookingForm.addEventListener('submit', function (e) {
+  const medicalForm = document.querySelector('#booking-form form');
+  if (medicalForm) {
+    medicalForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      if (!bookingForm.checkValidity()) {
-        bookingForm.classList.add('was-validated');
+      if (!medicalForm.checkValidity()) {
+        medicalForm.classList.add('was-validated');
         return;
       }
 
-      const inputs = bookingForm.querySelectorAll('input, select, textarea');
+      const inputs = medicalForm.querySelectorAll('input, select, textarea');
       const data = {};
       
       // Dynamic scanning logic safely maps medical fields based on custom target selectors
@@ -232,53 +231,56 @@ document.addEventListener('DOMContentLoaded', function () {
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
       
-      bookingForm.reset();
-      bookingForm.classList.remove('was-validated');
+      medicalForm.reset();
+      medicalForm.classList.remove('was-validated');
     });
   }
 
-  /* ---------------- 11. Geyser Service Booking Gateway ---------------- */
-  const geyserForm = document.getElementById('bookingFormGeyser'); // Renamed identifier to prevent collision with primary index form
-  if (geyserForm) {
-    geyserForm.addEventListener('submit', function (e) {
+  /* ---------------- 11. Main Multi-Service Booking Form Gateway ---------------- */
+  const mainBookingForm = document.getElementById('bookingForm');
+  if (mainBookingForm) {
+    mainBookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      if (!geyserForm.checkValidity()) {
-        geyserForm.classList.add('was-validated');
+      if (!mainBookingForm.checkValidity()) {
+        mainBookingForm.classList.add('was-validated');
         return;
       }
 
       // Safeguard element selection
       const nameEl = document.getElementById('bkName');
       const phoneEl = document.getElementById('bkPhone');
-      const typeEl = document.getElementById('bkRepairType');
+      const serviceEl = document.getElementById('bkService');
       const dateEl = document.getElementById('bkDate');
       const addressEl = document.getElementById('bkAddress');
+      const msgEl = document.getElementById('bkMessage');
 
       const data = {
         name: nameEl ? nameEl.value.trim() : '-',
         phone: phoneEl ? phoneEl.value.trim() : '-',
-        type: typeEl ? typeEl.options[typeEl.selectedIndex].text : '-',
+        service: serviceEl ? serviceEl.options[serviceEl.selectedIndex].text : '-',
         date: dateEl ? dateEl.value : '-',
-        address: addressEl ? addressEl.value.trim() : '-'
+        address: addressEl ? addressEl.value.trim() : '-',
+        message: msgEl && msgEl.value.trim() ? msgEl.value.trim() : 'None provided'
       };
 
-      // Formatted Whatsapp structural template
+      // Formatted WhatsApp structural template
       const textMessage = [
-        `*🔥 Geyser Service Booking Request*`,
+        `*🛠️ New Service Booking Request*`,
         `━━━━━━━━━━━━━━━━━━━━━━`,
         `👤 *Customer Name:* ${data.name}`,
         `📞 *Phone Number:* ${data.phone}`,
-        `🛠️ *Service Type:* ${data.type}`,
+        `✨ *Service Needed:* ${data.service}`,
         `📅 *Preferred Date:* ${data.date}`,
-        `📍 *Service Address:* ${data.address}`
+        `📍 *Service Address:* ${data.address}`,
+        `💬 *Message/Details:* ${data.message}`
       ].join('\n');
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener');
 
-      geyserForm.reset();
-      geyserForm.classList.remove('was-validated');
+      mainBookingForm.reset();
+      mainBookingForm.classList.remove('was-validated');
     });
   }
 
@@ -369,54 +371,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       projectsForm.reset();
       projectsForm.classList.remove('was-validated');
-    });
-  }
-
-  /* ---------------- 14. Primary Index Booking Form Gateway ---------------- */
-  const primaryBookingForm = document.getElementById('bookingForm');
-  if (primaryBookingForm) {
-    primaryBookingForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      if (!primaryBookingForm.checkValidity()) {
-        primaryBookingForm.classList.add('was-validated');
-        return;
-      }
-
-      // Safe DOM querying
-      const nameEl = document.getElementById('bkName');
-      const phoneEl = document.getElementById('bkPhone');
-      const serviceEl = document.getElementById('bkService');
-      const dateEl = document.getElementById('bkDate');
-      const addressEl = document.getElementById('bkAddress');
-      const msgEl = document.getElementById('bkMessage');
-
-      const data = {
-        name: nameEl ? nameEl.value.trim() : '-',
-        phone: phoneEl ? phoneEl.value.trim() : '-',
-        service: serviceEl ? serviceEl.options[serviceEl.selectedIndex].text : '-',
-        date: dateEl ? dateEl.value : '-',
-        address: addressEl ? addressEl.value.trim() : '-',
-        message: msgEl && msgEl.value.trim() ? msgEl.value.trim() : 'None provided'
-      };
-
-      // Construct beautifully formatted message templates for WhatsApp API execution
-      const textMessage = [
-        `*📅 New Booking Request — Guru Multi Services*`,
-        `━━━━━━━━━━━━━━━━━━━━━━`,
-        `👤 *Customer Name:* ${data.name}`,
-        `📞 *Phone Number:* ${data.phone}`,
-        `🛠️ *Service Selected:* ${data.service}`,
-        `📅 *Preferred Date:* ${data.date}`,
-        `📍 *Service Address:* ${data.address}`,
-        `💬 *Client Notes:* ${data.message}`
-      ].join('\n');
-
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
-      window.open(whatsappUrl, '_blank', 'noopener');
-
-      primaryBookingForm.reset();
-      primaryBookingForm.classList.remove('was-validated');
     });
   }
 
