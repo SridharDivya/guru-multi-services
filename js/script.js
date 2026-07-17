@@ -402,6 +402,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const applyFormFrame = document.getElementById('applyFormFrame');
   const applyFormWrap  = document.getElementById('applyFormWrap');
   const applyLoading   = document.getElementById('applyFormLoading');
+  const applySubmitBar = document.getElementById('applySubmitBar');
+  const applySubmittedBtn = document.getElementById('applySubmittedBtn');
   const applyThanksWrap= document.getElementById('applyThanksWrap');
   const applyWaLink    = document.getElementById('applyWhatsappLink');
   const applyDirectLink= document.getElementById('applyDirectLink');
@@ -411,7 +413,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let currentRole   = 'General';
     let frameLoadCount = 0;
-    let bsModal = null;
 
     function buildWhatsAppLink(role) {
       const message = `Hi, I've just submitted my application for the ${role} position at Guru Multi Services via the form. Please confirm you've received it.`;
@@ -421,6 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function resetModalToFormView() {
       applyThanksWrap.classList.add('d-none');
       applyFormWrap.style.display = '';
+      applySubmitBar.style.display = '';
       applyLoading.style.display = 'flex';
     }
 
@@ -428,6 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const waLink = buildWhatsAppLink(role);
 
       applyFormWrap.style.display = 'none';
+      applySubmitBar.style.display = 'none';
       applyThanksWrap.classList.remove('d-none');
 
       applyWaLink.setAttribute('href', waLink);
@@ -442,6 +445,18 @@ document.addEventListener('DOMContentLoaded', function () {
       } catch (err) { /* ignore — button in the panel still works */ }
     }
 
+    // PRIMARY trigger: the visitor taps "I've Submitted the Form" themselves,
+    // right after they finish inside the embedded form above. This always
+    // works, regardless of how Google's form happens to submit internally.
+    if (applySubmittedBtn) {
+      applySubmittedBtn.addEventListener('click', function () {
+        showThanksPanel(currentRole);
+      });
+    }
+
+    // BONUS trigger: if Google does navigate the iframe to its own
+    // "response recorded" page (it does for some forms/accounts), we catch
+    // that too and skip straight to the WhatsApp panel automatically.
     applyFormFrame.addEventListener('load', function () {
       frameLoadCount += 1;
       applyLoading.style.display = 'none';
