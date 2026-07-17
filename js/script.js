@@ -2,8 +2,9 @@
    GURU MULTI SERVICES — MAIN ARCHITECTURE SCRIPT
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
-             Main Multi-Service Booking Gateway, Software Projects Service
-             Booking Gateway, and the Careers Apply Form + WhatsApp Prompt.
+             Per-Service Booking Gateway (index.html + all services/*.html),
+             Software Projects Service Booking Gateway, and the Careers
+             Apply Form + WhatsApp Prompt.
 
    Note: Job applications (careers.html) are a single "Apply Now" click —
    it opens the Google Form (which supports the Photo/ID file uploads)
@@ -238,9 +239,104 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------------- 11. Main Multi-Service Booking Form Gateway ---------------- */
+  /* ---------------- 11. Per-Service Booking Form Gateway ----------------
+     The SAME form id="bookingForm" is reused on index.html AND on every
+     services/*.html page (plywood, repairs, carpentry, taxi, billing) —
+     but each page asks for a different set of fields (e.g. Carpentry
+     wants a "Project Type", Taxi wants "Pickup/Drop", Billing wants a
+     "Query Type"+"Invoice Number", etc).
+
+     Rather than hard-coding one fixed field set (which breaks on every
+     page except the one it was written for), we auto-detect which
+     service page we're on by checking for a field ID that only exists
+     on that page (its "detectField"), then build the WhatsApp message
+     using THAT service's own title + labeled field list.
+
+     Adding a new service page later? Just add one more object to
+     SERVICE_BOOKING_CONFIGS below — no other code changes needed.
+  ------------------------------------------------------------------------ */
+  const SERVICE_BOOKING_CONFIGS = [
+    // Carpentry & Wood Design — services/carpentry.html
+    {
+      detectField: 'bkProjectType',
+      title: '🪑 New Carpentry & Wood Design Booking Request',
+      fields: [
+        { id: 'bkName',        label: '👤 Customer Name' },
+        { id: 'bkPhone',       label: '📞 Phone Number' },
+        { id: 'bkProjectType', label: '🚪 Project Type' },
+        { id: 'bkDate',        label: '📅 Preferred Visit Date' },
+        { id: 'bkAddress',     label: '📍 Site Address' }
+      ]
+    },
+    // Plywood & Timber — services/plywood.html
+    {
+      detectField: 'bkProduct',
+      title: '🪵 New Plywood & Timber Order Request',
+      fields: [
+        { id: 'bkName',    label: '👤 Customer Name' },
+        { id: 'bkPhone',   label: '📞 Phone Number' },
+        { id: 'bkProduct', label: '🪚 Product Needed' },
+        { id: 'bkQty',     label: '📦 Approx. Quantity' },
+        { id: 'bkAddress', label: '📍 Delivery Address' }
+      ]
+    },
+    // Home Repairs — services/repairs.html
+    {
+      detectField: 'bkRepairType',
+      title: '🔧 New Home Repair Booking Request',
+      fields: [
+        { id: 'bkName',       label: '👤 Customer Name' },
+        { id: 'bkPhone',      label: '📞 Phone Number' },
+        { id: 'bkRepairType', label: '🛠️ Repair Type' },
+        { id: 'bkDate',       label: '📅 Preferred Date' },
+        { id: 'bkAddress',    label: '📍 Service Address' }
+      ]
+    },
+    // Car & Taxi Booking — services/taxi.html
+    {
+      detectField: 'bkRideType',
+      title: '🚕 New Car & Taxi Booking Request',
+      fields: [
+        { id: 'bkName',     label: '👤 Customer Name' },
+        { id: 'bkPhone',    label: '📞 Phone Number' },
+        { id: 'bkRideType', label: '🚗 Ride Type' },
+        { id: 'bkPickup',   label: '📍 Pickup Location' },
+        { id: 'bkDrop',     label: '🎯 Drop Location' }
+      ]
+    },
+    // Online Billing — services/billing.html
+    {
+      detectField: 'bkQueryType',
+      title: '🧾 New Billing Support Request',
+      fields: [
+        { id: 'bkName',      label: '👤 Customer Name' },
+        { id: 'bkPhone',     label: '📞 Phone Number' },
+        { id: 'bkInvoice',   label: '🧾 Invoice Number' },
+        { id: 'bkQueryType', label: '❓ Query Type' },
+        { id: 'bkAddress',   label: '📝 Details' }
+      ]
+    },
+    // Home page / general multi-service booking — index.html
+    {
+      detectField: 'bkService',
+      title: '🛠️ New Service Booking Request',
+      fields: [
+        { id: 'bkName',    label: '👤 Customer Name' },
+        { id: 'bkPhone',   label: '📞 Phone Number' },
+        { id: 'bkService', label: '✨ Service Needed' },
+        { id: 'bkDate',    label: '📅 Preferred Date' },
+        { id: 'bkAddress', label: '📍 Service Address' },
+        { id: 'bkMessage', label: '💬 Message/Details', optional: true, fallback: 'None provided' }
+      ]
+    }
+  ];
+
   const mainBookingForm = document.getElementById('bookingForm');
   if (mainBookingForm) {
+
+    // Pick whichever config's unique "detectField" is present in THIS page's form
+    const activeConfig = SERVICE_BOOKING_CONFIGS.find(cfg => document.getElementById(cfg.detectField)) || null;
+
     mainBookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -249,33 +345,50 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Safeguard element selection
-      const nameEl = document.getElementById('bkName');
-      const phoneEl = document.getElementById('bkPhone');
-      const serviceEl = document.getElementById('bkService');
-      const dateEl = document.getElementById('bkDate');
-      const addressEl = document.getElementById('bkAddress');
-      const msgEl = document.getElementById('bkMessage');
+      const lines = [];
+      let title = '🛠️ New Service Booking Request';
 
-      const data = {
-        name: nameEl ? nameEl.value.trim() : '-',
-        phone: phoneEl ? phoneEl.value.trim() : '-',
-        service: serviceEl ? serviceEl.options[serviceEl.selectedIndex].text : '-',
-        date: dateEl ? dateEl.value : '-',
-        address: addressEl ? addressEl.value.trim() : '-',
-        message: msgEl && msgEl.value.trim() ? msgEl.value.trim() : 'None provided'
-      };
+      if (activeConfig) {
+        title = activeConfig.title;
 
-      // Formatted WhatsApp structural template
+        activeConfig.fields.forEach(f => {
+          const el = document.getElementById(f.id);
+          if (!el) return; // field not present on this particular page — skip cleanly
+
+          let value;
+          if (el.tagName === 'SELECT') {
+            value = el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
+          } else {
+            value = el.value.trim();
+          }
+
+          if (!value) value = f.optional ? (f.fallback || 'None provided') : '-';
+          lines.push(`*${f.label}:* ${value}`);
+        });
+
+      } else {
+        // Safety net: an unrecognised booking form (e.g. a brand new
+        // service page not yet added above) still gets a working,
+        // dynamically-built WhatsApp message instead of silently failing.
+        mainBookingForm.querySelectorAll('input, select, textarea').forEach(field => {
+          if (!field.id && !field.name) return;
+          if (['submit', 'hidden', 'button'].includes(field.type)) return;
+
+          let value = '-';
+          if (field.tagName === 'SELECT') {
+            value = field.options[field.selectedIndex].text;
+          } else if (field.value && field.value.trim()) {
+            value = field.value.trim();
+          }
+
+          lines.push(`🔸 *${field.name || field.id}:* ${value}`);
+        });
+      }
+
       const textMessage = [
-        `*🛠️ New Service Booking Request*`,
+        `*${title}*`,
         `━━━━━━━━━━━━━━━━━━━━━━`,
-        `👤 *Customer Name:* ${data.name}`,
-        `📞 *Phone Number:* ${data.phone}`,
-        `✨ *Service Needed:* ${data.service}`,
-        `📅 *Preferred Date:* ${data.date}`,
-        `📍 *Service Address:* ${data.address}`,
-        `💬 *Message/Details:* ${data.message}`
+        ...lines
       ].join('\n');
 
       const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
