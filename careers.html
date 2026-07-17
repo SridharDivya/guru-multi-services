@@ -13,30 +13,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* --- Two-step Apply flow: Step 2 is locked until Step 1 is clicked --- */
-  .step-label{
-    display:block;
-    font-size:0.72rem;
-    letter-spacing:.04em;
-    text-transform:uppercase;
-    color:var(--text-muted, #8a8a8a);
-    margin:10px 0 4px;
-  }
-  .whatsapp-btn.disabled-step{
-    pointer-events:none;
-    opacity:0.45;
-    filter:grayscale(40%);
-    cursor:not-allowed;
-  }
-  .whatsapp-btn.step-ready{
-    animation:guruPulse 1.4s ease-in-out 2;
-  }
+  /* --- Apply modal: embedded form + auto WhatsApp prompt after submit --- */
   @keyframes guruPulse{
     0%,100%{ box-shadow:0 0 0 0 rgba(37,211,102,.45); }
     50%{ box-shadow:0 0 0 8px rgba(37,211,102,0); }
   }
-
-  /* --- Apply modal: embedded form + auto WhatsApp prompt after submit --- */
   #applyFormFrame{
     width:100%;
     height:72vh;
@@ -100,7 +81,7 @@
         <span class="eyebrow">Careers</span>
         <h2 class="mt-2 mb-3">Current Openings</h2>
         <p style="color:var(--text-muted)">We're growing across plywood & carpentry, home repairs, and taxi services, and we're looking for reliable, skilled people to grow with us. Steady work, fair pay, and real skill-building — not just a one-off gig.</p>
-        <p style="color:var(--text-muted); font-size:0.9rem"><i class="fa-solid fa-circle-info me-1"></i> Applying is a quick 2-step process: fill the form, then confirm on WhatsApp so our hiring team knows to expect it.</p>
+        <p style="color:var(--text-muted); font-size:0.9rem"><i class="fa-solid fa-circle-info me-1"></i> Applying takes one click — fill the form right here on the page, and we'll prompt you to confirm on WhatsApp the moment you submit.</p>
       </div>
     </div>
 
@@ -117,22 +98,12 @@
             <h4>Plumber</h4>
             <p>Install and repair pipwork, fittings and fixtures for home and site jobs. 2+ years' experience preferred; tools provided.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
-
-            <span class="step-label">Step 1 of 2</span>
             <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
                data-role="Plumber"
                data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
             </button>
-
-            <span class="step-label">Step 2 of 2 &mdash; required</span>
-            <a href="#" aria-disabled="true"
-               class="btn-outline-wood justify-content-center w-100 whatsapp-btn disabled-step"
-               data-role="Plumber"
-               style="font-size:0.85rem;">
-               <i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp (apply first)
-            </a>
           </div>
         </div>
       </div>
@@ -148,22 +119,12 @@
             <h4>Electrician</h4>
             <p>Wiring, fault repair and fitting installation for residential and commercial jobs. Valid electrical license required.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
-
-            <span class="step-label">Step 1 of 2</span>
             <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
                data-role="Electrician"
                data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
             </button>
-
-            <span class="step-label">Step 2 of 2 &mdash; required</span>
-            <a href="#" aria-disabled="true"
-               class="btn-outline-wood justify-content-center w-100 whatsapp-btn disabled-step"
-               data-role="Electrician"
-               style="font-size:0.85rem;">
-               <i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp (apply first)
-            </a>
           </div>
         </div>
       </div>
@@ -179,22 +140,12 @@
             <h4>Painter</h4>
             <p>Interior and exterior painting, texture work and finishing for homes and offices. Steady hand and attention to detail a must.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time / Part-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
-
-            <span class="step-label">Step 1 of 2</span>
             <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
                data-role="Painter"
                data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
             </button>
-
-            <span class="step-label">Step 2 of 2 &mdash; required</span>
-            <a href="#" aria-disabled="true"
-               class="btn-outline-wood justify-content-center w-100 whatsapp-btn disabled-step"
-               data-role="Painter"
-               style="font-size:0.85rem;">
-               <i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp (apply first)
-            </a>
           </div>
         </div>
       </div>
@@ -210,22 +161,12 @@
             <h4>Driver</h4>
             <p>Drive for our taxi & booking service — airport runs, local trips and outstation bookings. Valid commercial license required.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
-
-            <span class="step-label">Step 1 of 2</span>
             <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
                data-role="Driver"
                data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
             </button>
-
-            <span class="step-label">Step 2 of 2 &mdash; required</span>
-            <a href="#" aria-disabled="true"
-               class="btn-outline-wood justify-content-center w-100 whatsapp-btn disabled-step"
-               data-role="Driver"
-               style="font-size:0.85rem;">
-               <i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp (apply first)
-            </a>
           </div>
         </div>
       </div>
@@ -241,22 +182,12 @@
             <h4>Carpenter</h4>
             <p>Build and fit doors, windows, TV units and custom furniture. Experience with hand carving and finishing is a strong plus.</p>
             <p class="mb-0" style="color:var(--text-muted); font-size:0.88rem"><i class="fa-solid fa-briefcase me-1"></i> Full-time &nbsp; <i class="fa-solid fa-location-dot me-1 ms-2"></i> Chittoor & nearby</p>
-
-            <span class="step-label">Step 1 of 2</span>
             <button type="button"
                class="btn-gold justify-content-center w-100 apply-btn"
                data-role="Carpenter"
                data-bs-toggle="modal" data-bs-target="#applyModal">
                <i class="fa-solid fa-paper-plane"></i> Apply Now
             </button>
-
-            <span class="step-label">Step 2 of 2 &mdash; required</span>
-            <a href="#" aria-disabled="true"
-               class="btn-outline-wood justify-content-center w-100 whatsapp-btn disabled-step"
-               data-role="Carpenter"
-               style="font-size:0.85rem;">
-               <i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp (apply first)
-            </a>
           </div>
         </div>
       </div>
