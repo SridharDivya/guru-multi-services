@@ -3,13 +3,14 @@
    Features: Preloader, Scroll Progress, Counters, Active FAQ Accordions,
              Before/After Sliders, Specialized CMC Medical Booking Gateway,
              Main Multi-Service Booking Gateway, Software Projects Service
-             Booking Gateway, and the Careers Two-Step Apply Enforcement.
+             Booking Gateway, and the Careers Apply Form + WhatsApp Prompt.
 
-   Note: Job applications (careers.html) open the Google Form (which
-   supports the Photo/ID file uploads) inside a modal on our own page. We
-   detect a successful submission by watching the embedded form's iframe
-   reload itself to Google's "response recorded" screen, then immediately
-   prompt the applicant to confirm via WhatsApp — see section 14 below.
+   Note: Job applications (careers.html) are a single "Apply Now" click —
+   it opens the Google Form (which supports the Photo/ID file uploads)
+   inside a modal on our own page. We detect a successful submission by
+   watching the embedded form's iframe reload itself to Google's
+   "response recorded" screen, then immediately prompt the applicant to
+   confirm via WhatsApp — see section 14 below.
    ========================================================================== */
 
 // Your WhatsApp Business API number (International format, digits only)
@@ -376,12 +377,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ---------------- 14. Careers — Embedded Apply Form + Auto WhatsApp Prompt ----------------
-     The Google Form is embedded in a modal instead of opening in a new tab.
-     We can't read the iframe's contents or URL (it's a different origin —
-     docs.google.com), but we CAN watch the iframe's `load` event, which
-     fires once for the initial empty form and fires AGAIN the moment
-     Google navigates it to the "your response has been recorded" page
-     after a successful submit. That second load is our submission signal.
+     One click: "Apply Now" opens the Google Form embedded in a modal on
+     this page (no new tab). We can't read the iframe's contents or URL
+     (it's a different origin — docs.google.com), but we CAN watch the
+     iframe's `load` event, which fires once for the initial empty form
+     and fires AGAIN the moment Google navigates it to the "your response
+     has been recorded" page after a successful submit. That second load
+     is our submission signal.
 
      The instant it fires, we swap the modal to a "Confirm on WhatsApp"
      panel with a big, pulsing WhatsApp button pre-filled with a
@@ -432,25 +434,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Best-effort auto-open. Works on some mobile browsers; desktop
       // browsers will usually block it since this isn't a direct click —
-      // the visible button above is the reliable fallback either way.
+      // the big "Confirm on WhatsApp" button in the panel above is the
+      // reliable fallback either way.
       try {
         const popup = window.open(waLink, '_blank', 'noopener');
         if (!popup) { /* blocked — the button in the panel still works */ }
       } catch (err) { /* ignore — button in the panel still works */ }
-
-      // Also unlock the small per-card "Notify on WhatsApp" button, in
-      // case the visitor closes this modal and looks for it on the card.
-      const cardWaBtn = document.querySelector(`.whatsapp-btn[data-role="${CSS.escape(role)}"]`);
-      if (cardWaBtn) {
-        cardWaBtn.classList.remove('disabled-step');
-        cardWaBtn.removeAttribute('aria-disabled');
-        cardWaBtn.setAttribute('href', waLink);
-        cardWaBtn.setAttribute('target', '_blank');
-        cardWaBtn.setAttribute('rel', 'noopener');
-        cardWaBtn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Notify on WhatsApp';
-        cardWaBtn.classList.add('step-ready');
-      }
-      localStorage.setItem('guru_applied_' + role, '1');
     }
 
     applyFormFrame.addEventListener('load', function () {
