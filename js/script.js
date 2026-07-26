@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ---------------- 11. Per-Service Booking Form Gateway ----------------
      The SAME form id="bookingForm" is reused on index.html AND on every
-     services/*.html page (plywood, repairs, carpentry, taxi, billing) —
+     services/*.html page (plywood, repairs, carpentry, dth-installation, taxi, billing) —
      but each page asks for a different set of fields (e.g. Carpentry
      wants a "Project Type", Taxi wants "Pickup/Drop", Billing wants a
      "Query Type"+"Invoice Number", etc).
@@ -302,6 +302,18 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'bkRideType', label: '🚗 Ride Type' },
         { id: 'bkPickup',   label: '📍 Pickup Location' },
         { id: 'bkDrop',     label: '🎯 Drop Location' }
+      ]
+    },
+    // DTH & Broadband Installation — services/dth-installation.html
+    {
+      detectField: 'bkDishType',
+      title: '📡 New DTH & Broadband Installation Request',
+      fields: [
+        { id: 'bkName',     label: '👤 Customer Name' },
+        { id: 'bkPhone',    label: '📞 Phone Number' },
+        { id: 'bkDishType', label: '📡 Connection Type' },
+        { id: 'bkDate',     label: '📅 Preferred Visit Date' },
+        { id: 'bkAddress',  label: '📍 Site Address' }
       ]
     },
     // Online Billing — services/billing.html
