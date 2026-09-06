@@ -292,6 +292,18 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'bkAddress',    label: '📍 Service Address' }
       ]
     },
+    // Electrician Services — services/electrician.html
+    {
+      detectField: 'bkElecType',
+      title: '⚡ New Electrician Service Booking Request',
+      fields: [
+        { id: 'bkName',     label: '👤 Customer Name' },
+        { id: 'bkPhone',    label: '📞 Phone Number' },
+        { id: 'bkElecType', label: '⚡ Service Type' },
+        { id: 'bkDate',     label: '📅 Preferred Date' },
+        { id: 'bkAddress',  label: '📍 Service Address' }
+      ]
+    },
     // Car & Taxi Booking — services/taxi.html
     {
       detectField: 'bkRideType',
